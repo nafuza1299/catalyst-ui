@@ -27,4 +27,10 @@ describe("Popover", () => {
     fireEvent.keyDown(document, { key: "Escape" });
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
+
+  it("replaces panel content with a loading placeholder", () => {
+    render(<Popover open onOpenChange={() => {}} trigger={<Button>Filters</Button>} loading><p>Loaded content</p></Popover>);
+    expect(screen.getByLabelText("Loading popover")).toHaveAttribute("aria-busy", "true");
+    expect(screen.queryByText("Loaded content")).not.toBeInTheDocument();
+  });
 });

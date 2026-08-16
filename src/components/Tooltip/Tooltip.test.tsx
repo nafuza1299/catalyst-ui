@@ -25,4 +25,10 @@ describe("Tooltip", () => {
     fireEvent.focus(screen.getByRole("button", { name: "Copy" }));
     expect(screen.getByRole("tooltip")).toBeInTheDocument();
   });
+
+  it("renders its loading placeholder and standalone skeleton", () => {
+    render(<><Tooltip content="Copy" loading><Button aria-label="Copy">Copy</Button></Tooltip><Tooltip.Skeleton /></>);
+    fireEvent.focus(screen.getByRole("button", { name: "Copy" }));
+    expect(screen.getByRole("tooltip").querySelector('[aria-hidden="true"]')).toBeInTheDocument();
+  });
 });

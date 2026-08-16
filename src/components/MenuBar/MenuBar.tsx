@@ -56,7 +56,6 @@ const dropdownTriggerActiveClass = "text-primary bg-primary/10";
 const menuItemClass =
   "w-full text-left px-3 py-2 text-sm font-medium rounded-sm transition-colors duration-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
 const menuItemInactiveClass = "text-text hover:bg-surface-hover";
-const menuItemActiveClass = "bg-primary/10 text-primary";
 
 function MenuBarLink({
   href,
@@ -186,7 +185,6 @@ function MenuBarDropdown({ label, items, className = "" }: MenuBarDropdownProps)
           <div className="py-1">
             {items.map((item, index) => {
               const isHighlighted = index === highlightedIndex;
-              const isActive = false; // Would need activeKey prop to set this
               return (
                 <div
                   key={item.key}
@@ -196,7 +194,7 @@ function MenuBarDropdown({ label, items, className = "" }: MenuBarDropdownProps)
                   onMouseLeave={() => setHighlightedIndex(0)}
                   className={[
                     menuItemClass,
-                    isActive ? menuItemActiveClass : menuItemInactiveClass,
+                    menuItemInactiveClass,
                     isHighlighted ? "bg-primary/10" : "",
                   ]
                     .filter(Boolean)

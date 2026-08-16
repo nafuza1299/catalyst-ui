@@ -36,4 +36,10 @@ describe("Tag", () => {
     expect(screen.queryByText("Owner")).not.toBeInTheDocument();
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
+
+  it("derives dismiss labels from nested and numeric content", () => {
+    const onDismiss = jest.fn();
+    render(<Tag dismissible onDismiss={onDismiss}><strong>Release </strong>{42}</Tag>);
+    expect(screen.getByRole("button", { name: "Remove Release 42 tag" })).toBeInTheDocument();
+  });
 });

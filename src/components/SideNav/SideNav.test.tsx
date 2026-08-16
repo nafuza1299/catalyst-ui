@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { SideNav, type SideNavItem } from './SideNav';
 
@@ -121,5 +121,41 @@ describe('SideNav Component', () => {
     render(<SideNav items={mockItems} />);
     const navs = screen.getAllByRole('navigation');
     expect(navs.length).toBeGreaterThan(0);
+  });
+
+  it('dismisses the mobile drawer with Escape and its backdrop', () => {
+    const onOpenChange = jest.fn();
+    render(<SideNav items={mockItems} open onOpenChange={onOpenChange} />);
+    const dialog = screen.getByRole('dialog', { name: 'Main navigation' });
+    expect(document.body.style.overflow).toBe('hidden');
+    fireEvent.keyDown(document, { key: 'Escape' });
+    fireEvent.click(screen.getByRole('button', { name: 'Close navigation' }));
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
+
+  it('renders skeleton items while loading', () => {
+    render(<SideNav items={mockItems} loading />);
+    expect(screen.getAllByLabelText('Loading navigation')).toHaveLength(2);
+    expect(screen.queryByText('Dashboard')).not.toBeInTheDocument();
+  });
+
+  it('wraps Tab focus within the mobile drawer', () => {
+    render(<SideNav items={mockItems} open onOpenChange={() => {}} />);
+    const dialog = screen.getByRole('dialog', { name: 'Main navigation' });
+    const focusableItems = dialog.querySelectorAll<HTMLElement>('a[href], button:not([disabled])');
+    const first = focusableItems[0];
+    const last = focusableItems[focusableItems.length - 1];
+    last.focus();
+    fireEvent.keyDown(document, { key: 'Tab' });
+    expect(first).toHaveFocus();
+    fireEvent.keyDown(document, { key: 'Tab', shiftKey: true });
+    expect(last).toHaveFocus();
+  });
+
+  it('prevents Tab from leaving an empty mobile drawer', () => {
+    render(<SideNav items={[]} open onOpenChange={() => {}} />);
+    const event = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
+    document.dispatchEvent(event);
+    expect(event.defaultPrevented).toBe(true);
   });
 });

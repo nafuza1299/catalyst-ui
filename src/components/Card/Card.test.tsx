@@ -98,4 +98,16 @@ describe('Card Component', () => {
     expect(screen.getByLabelText('Loading card')).toHaveAttribute('aria-busy', 'true');
     expect(screen.queryByText('Loaded content')).not.toBeInTheDocument();
   });
+
+  it('renders every structured section without applying root padding', () => {
+    const { container } = render(<Card padding="sm">
+      <Card.Header><Card.Title>Title</Card.Title><Card.Description>Description</Card.Description></Card.Header>
+      <Card.Body>Body</Card.Body><Card.Footer>Footer</Card.Footer>
+    </Card>);
+    expect(screen.getByRole('heading', { name: 'Title' })).toBeInTheDocument();
+    expect(screen.getByText('Description').tagName).toBe('P');
+    expect(screen.getByText('Body')).toHaveClass('px-4');
+    expect(screen.getByText('Footer').tagName).toBe('FOOTER');
+    expect(container.querySelector('div[class*="rounded-lg"]')).not.toHaveClass('p-3');
+  });
 });
