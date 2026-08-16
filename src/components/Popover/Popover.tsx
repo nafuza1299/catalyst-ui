@@ -1,0 +1,72 @@
+import {
+  autoUpdate,
+  flip,
+  FloatingFocusManager,
+  FloatingPortal,
+  offset,
+  shift,
+  useClick,
+  useDismiss,
+  useFloating,
+  useInteractions,
+  useRole,
+  type Placement,
+} from "@floating-ui/react";
+import { cloneElement, isValidElement, type ReactElement, type ReactNode } from "react";
+
+export type PopoverSide = "top" | "right" | "bottom" | "left";
+export type PopoverAlign = "start" | "center" | "end";
+
+export interface PopoverProps {
+  /** Whether the caller has the popover open. */
+  open: boolean;
+  /** Called for trigger toggles, outside presses, and Escape. */
+  onOpenChange: (open: boolean) => void;
+  /** The element that toggles the popover. */
+  trigger: ReactElement;
+  /** Preferred side. The panel flips when this would overflow. */
+  side?: PopoverSide;
+  /** Alignment along the trigger's edge. */
+  align?: PopoverAlign;
+  children: ReactNode;
+}
+
+/** A controlled, non-modal floating panel for rich, interactive content. */
+export function Popover({ open, onOpenChange, trigger, side = "bottom", align = "start", children }: PopoverProps) {
+  const { refs, floatingStyles, context } = useFloating({
+    open,
+    onOpenChange,
+    placement: `${side}-${align}` as Placement,
+    middleware: [offset(8), flip(), shift({ padding: 8 })],
+    whileElementsMounted: autoUpdate,
+  });
+  const click = useClick(context);
+  const dismiss = useDismiss(context, { outsidePressEvent: "mousedown", escapeKey: true });
+  const role = useRole(context, { role: "dialog" });
+  const { getReferenceProps, getFloatingProps } = useInteractions([click, dismiss, role]);
+
+  if (!isValidElement(trigger)) throw new Error("Popover trigger must be a React element.");
+  const triggerProps = trigger.props as Record<string, unknown>;
+  const referenceProps = getReferenceProps({
+    ...triggerProps,
+    ref: (node: HTMLElement | null) => refs.setReference(node),
+    "aria-haspopup": "dialog",
+    "aria-expanded": open,
+  });
+
+  return <>
+    {cloneElement(trigger, referenceProps)}
+    {open && <FloatingPortal>
+      <FloatingFocusManager context={context} modal={false} initialFocus={0} returnFocus={false}>
+        <div
+          ref={refs.setFloating}
+          style={floatingStyles}
+          className="z-50 min-w-56 rounded-lg border border-border bg-surface p-4 text-text shadow-elevation outline-none"
+          {...getFloatingProps()}
+        >
+          {children}
+        </div>
+      </FloatingFocusManager>
+    </FloatingPortal>}
+  </>;
+}

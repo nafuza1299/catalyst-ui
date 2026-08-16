@@ -51,6 +51,8 @@ Radius scale: `rounded-sm` (6px), `rounded-md` (8px, default for buttons/inputs)
 | Menu Bar | ✅ built | `src/components/MenuBar/MenuBar.spec.md` — top-level app navigation with hybrid slot-based layout (Brand/Nav/Actions) and data-driven dropdown menus. Responsive: desktop horizontal bar, mobile hamburger-triggered sheet. Shares focus-trap and overlay patterns with Side Nav. |
 
 | Modal | built | `src/components/Modal/Modal.spec.md` - controlled portal dialog with compound slots, focus trapping, scroll lock, and focus restoration. |
+| Tooltip | âœ… built | `src/components/Tooltip/Tooltip.spec.md` â€” delayed hover/focus plain-text hint; uses Floating UI for automatic flip and shift positioning. |
+| Popover | âœ… built | `src/components/Popover/Popover.spec.md` â€” controlled, non-modal rich-content panel; uses Floating UI for positioning and dismissal. Menu Bar dropdown is a future candidate to reuse it internally. |
 
 ## Rules for AI-generated UI using this system
 

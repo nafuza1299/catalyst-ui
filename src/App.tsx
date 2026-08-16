@@ -3,8 +3,10 @@ import { Button } from "./components/Button/Button";
 import { Card } from "./components/Card/Card";
 import { MenuBar } from "./components/MenuBar/MenuBar";
 import { Modal } from "./components/Modal/Modal";
+import { Popover } from "./components/Popover/Popover";
 import { SideNav, type SideNavItem } from "./components/SideNav/SideNav";
 import { Tag, type TagColor } from "./components/Tag/Tag";
+import { Tooltip } from "./components/Tooltip/Tooltip";
 import { useTheme } from "./theme/ThemeProvider";
 
 function HomeIcon() {
@@ -84,6 +86,7 @@ export default function App() {
   const [showBugTag, setShowBugTag] = useState(true);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const contentMap: Record<string, { title: string; eyebrow: string; description: string }> = {
     overview: {
@@ -192,6 +195,25 @@ export default function App() {
                     <Tag color="blue">8 active projects</Tag>
                     <Tag color="amber">2 alerts</Tag>
                   </div>
+                </Card.Body>
+              </Card>
+
+              <Card>
+                <Card.Header>
+                  <Card.Title>Floating content</Card.Title>
+                  <Card.Description>Hover hints and a controlled filter panel.</Card.Description>
+                </Card.Header>
+                <Card.Body className="flex flex-wrap items-center gap-3">
+                  <Tooltip content="Shows above the control" side="top"><Button variant="ghost" iconOnly aria-label="Top tooltip">T</Button></Tooltip>
+                  <Tooltip content="Shows to the right" side="right"><Button variant="ghost" iconOnly aria-label="Right tooltip">R</Button></Tooltip>
+                  <Tooltip content="Shows below the control" side="bottom"><Button variant="ghost" iconOnly aria-label="Bottom tooltip">B</Button></Tooltip>
+                  <Tooltip content="Shows to the left" side="left"><Button variant="ghost" iconOnly aria-label="Left tooltip">L</Button></Tooltip>
+                  <Popover open={filtersOpen} onOpenChange={setFiltersOpen} trigger={<Button variant="secondary">Filters</Button>}>
+                    <form className="space-y-3" onSubmit={(event) => { event.preventDefault(); setFiltersOpen(false); }}>
+                      <div><label htmlFor="status" className="block text-sm font-medium">Status</label><select id="status" className="mt-1 w-full rounded-md border border-border bg-bg px-2 py-1.5 text-sm"><option>All projects</option><option>Active</option><option>Archived</option></select></div>
+                      <Button type="submit" size="sm">Apply filters</Button>
+                    </form>
+                  </Popover>
                 </Card.Body>
               </Card>
 
