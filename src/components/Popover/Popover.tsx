@@ -13,6 +13,7 @@ import {
   type Placement,
 } from "@floating-ui/react";
 import { cloneElement, isValidElement, type ReactElement, type ReactNode } from "react";
+import { Skeleton } from "../Skeleton/Skeleton";
 
 export type PopoverSide = "top" | "right" | "bottom" | "left";
 export type PopoverAlign = "start" | "center" | "end";
@@ -29,10 +30,12 @@ export interface PopoverProps {
   /** Alignment along the trigger's edge. */
   align?: PopoverAlign;
   children: ReactNode;
+  /** Shows a panel placeholder while its content is loading. */
+  loading?: boolean;
 }
 
 /** A controlled, non-modal floating panel for rich, interactive content. */
-export function Popover({ open, onOpenChange, trigger, side = "bottom", align = "start", children }: PopoverProps) {
+export function Popover({ open, onOpenChange, trigger, side = "bottom", align = "start", loading = false, children }: PopoverProps) {
   const { refs, floatingStyles, context } = useFloating({
     open,
     onOpenChange,
@@ -64,9 +67,15 @@ export function Popover({ open, onOpenChange, trigger, side = "bottom", align = 
           className="z-50 min-w-56 rounded-lg border border-border bg-surface p-4 text-text shadow-elevation outline-none"
           {...getFloatingProps()}
         >
-          {children}
+          {loading ? <PopoverSkeleton /> : children}
         </div>
       </FloatingFocusManager>
     </FloatingPortal>}
   </>;
 }
+
+export function PopoverSkeleton() {
+  return <div aria-busy="true" aria-label="Loading popover" className="w-48 space-y-3"><Skeleton className="w-3/5" /><Skeleton className="w-full" /><Skeleton className="w-4/5" /></div>;
+}
+
+Popover.Skeleton = PopoverSkeleton;

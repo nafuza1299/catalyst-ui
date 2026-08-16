@@ -54,6 +54,10 @@ Radius scale: `rounded-sm` (6px), `rounded-md` (8px, default for buttons/inputs)
 | Tooltip | âœ… built | `src/components/Tooltip/Tooltip.spec.md` â€” delayed hover/focus plain-text hint; uses Floating UI for automatic flip and shift positioning. |
 | Popover | âœ… built | `src/components/Popover/Popover.spec.md` â€” controlled, non-modal rich-content panel; uses Floating UI for positioning and dismissal. Menu Bar dropdown is a future candidate to reuse it internally. |
 
+## Loading states
+
+Use `Skeleton` for loading content, wrapped in a region with `aria-busy="true"`. Content-bearing components accept `loading` where appropriate: `Card`, `Tag`, `SideNav`, `MenuBar`, `Modal`, `Popover`, and `Tooltip`. Compound components expose a matching `.Skeleton` variant for composing custom layouts. `Button` retains its spinner-based `loading` state.
+
 ## Rules for AI-generated UI using this system
 
 1. Only use the semantic tokens listed above — never introduce new colors. Tag color tokens are reserved for categorical `Tag` usage.

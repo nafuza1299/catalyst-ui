@@ -1,4 +1,5 @@
 import { forwardRef, isValidElement, type HTMLAttributes, type ReactNode } from "react";
+import { Skeleton } from "../Skeleton/Skeleton";
 
 export type TagColor = "blue" | "green" | "amber" | "red" | "purple" | "gray";
 export type TagSize = "sm" | "md";
@@ -20,6 +21,8 @@ export type TagProps = Omit<HTMLAttributes<HTMLSpanElement>, "color"> & {
   size?: TagSize;
   /** Optional leading icon or status indicator. */
   icon?: ReactNode;
+  /** Replaces tag content with a size-matched placeholder. */
+  loading?: boolean;
 } & (DismissibleTagProps | StaticTagProps);
 
 const colorStyles: Record<TagColor, string> = {
@@ -44,7 +47,7 @@ function getTextContent(node: ReactNode): string {
 }
 
 export const Tag = forwardRef<HTMLSpanElement, TagProps>(
-  ({ color = "gray", size = "md", icon, dismissible = false, onDismiss, className = "", children, ...rest }, ref) => {
+  ({ color = "gray", size = "md", icon, dismissible = false, onDismiss, loading = false, className = "", children, ...rest }, ref) => {
     const label = getTextContent(children).trim() || "tag";
 
     return (
@@ -58,9 +61,8 @@ export const Tag = forwardRef<HTMLSpanElement, TagProps>(
         ].filter(Boolean).join(" ")}
         {...rest}
       >
-        {icon && <span aria-hidden="true" className="inline-flex shrink-0">{icon}</span>}
-        <span>{children}</span>
-        {dismissible && (
+        {loading ? <Skeleton label="Loading tag" className={size === "sm" ? "h-2.5 w-10" : "h-3 w-14"} /> : <>{icon && <span aria-hidden="true" className="inline-flex shrink-0">{icon}</span>}<span>{children}</span></>}
+        {dismissible && !loading && (
           <button
             type="button"
             aria-label={`Remove ${label} tag`}

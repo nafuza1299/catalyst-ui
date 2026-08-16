@@ -7,6 +7,7 @@ import { Popover } from "./components/Popover/Popover";
 import { SideNav, type SideNavItem } from "./components/SideNav/SideNav";
 import { Tag, type TagColor } from "./components/Tag/Tag";
 import { Tooltip } from "./components/Tooltip/Tooltip";
+import { Skeleton } from "./components/Skeleton/Skeleton";
 import { useTheme } from "./theme/ThemeProvider";
 
 function HomeIcon() {
@@ -87,6 +88,7 @@ export default function App() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [showLoadingPreview, setShowLoadingPreview] = useState(false);
 
   const contentMap: Record<string, { title: string; eyebrow: string; description: string }> = {
     overview: {
@@ -110,7 +112,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-bg text-text">
-      <MenuBar mobileOpen={menuBarMobileOpen} onMobileOpenChange={setMenuBarMobileOpen}>
+      <MenuBar mobileOpen={menuBarMobileOpen} onMobileOpenChange={setMenuBarMobileOpen} loading={showLoadingPreview}>
         <MenuBar.Brand>
           <span className="text-lg font-semibold text-primary">Catalyst</span>
         </MenuBar.Brand>
@@ -162,6 +164,7 @@ export default function App() {
           onSelect={setActiveKey}
           open={mobileNavOpen}
           onOpenChange={setMobileNavOpen}
+          loading={showLoadingPreview}
         />
 
         <main className="flex-1 p-4 sm:p-8 lg:p-10">
@@ -184,10 +187,18 @@ export default function App() {
                   <h1 className="mt-1 text-2xl font-semibold text-text">{current.title}</h1>
                 </div>
               </div>
+              <Button
+                variant="secondary"
+                size="sm"
+                aria-pressed={showLoadingPreview}
+                onClick={() => setShowLoadingPreview((current) => !current)}
+              >
+                {showLoadingPreview ? "Show content" : "Preview loading"}
+              </Button>
             </header>
 
             <section className="space-y-6">
-              <Card as="article">
+              <Card as="article" loading={showLoadingPreview}>
                 <Card.Body>
                   <p className="text-sm text-text-muted">{current.description}</p>
                   <div className="mt-4 flex flex-wrap gap-3">
@@ -204,11 +215,11 @@ export default function App() {
                   <Card.Description>Hover hints and a controlled filter panel.</Card.Description>
                 </Card.Header>
                 <Card.Body className="flex flex-wrap items-center gap-3">
-                  <Tooltip content="Shows above the control" side="top"><Button variant="ghost" iconOnly aria-label="Top tooltip">T</Button></Tooltip>
+                  <Tooltip content="Shows above the control" side="top" loading={showLoadingPreview}><Button variant="ghost" iconOnly aria-label="Top tooltip">T</Button></Tooltip>
                   <Tooltip content="Shows to the right" side="right"><Button variant="ghost" iconOnly aria-label="Right tooltip">R</Button></Tooltip>
                   <Tooltip content="Shows below the control" side="bottom"><Button variant="ghost" iconOnly aria-label="Bottom tooltip">B</Button></Tooltip>
                   <Tooltip content="Shows to the left" side="left"><Button variant="ghost" iconOnly aria-label="Left tooltip">L</Button></Tooltip>
-                  <Popover open={filtersOpen} onOpenChange={setFiltersOpen} trigger={<Button variant="secondary">Filters</Button>}>
+                  <Popover open={filtersOpen} onOpenChange={setFiltersOpen} loading={showLoadingPreview} trigger={<Button variant="secondary">Filters</Button>}>
                     <form className="space-y-3" onSubmit={(event) => { event.preventDefault(); setFiltersOpen(false); }}>
                       <div><label htmlFor="status" className="block text-sm font-medium">Status</label><select id="status" className="mt-1 w-full rounded-md border border-border bg-bg px-2 py-1.5 text-sm"><option>All projects</option><option>Active</option><option>Archived</option></select></div>
                       <Button type="submit" size="sm">Apply filters</Button>
@@ -236,7 +247,7 @@ export default function App() {
                 <Card.Body className="space-y-4">
                   <div className="flex flex-wrap items-center gap-2">
                     {(["blue", "green", "amber", "red", "purple", "gray"] as TagColor[]).map((color) => (
-                      <Tag key={color} color={color}>{color}</Tag>
+                      <Tag key={color} color={color} loading={showLoadingPreview}>{color}</Tag>
                     ))}
                   </div>
                   <div className="flex flex-wrap items-center gap-2">
@@ -256,8 +267,25 @@ export default function App() {
                 </Card.Body>
               </Card>
 
+              <Card>
+                <Card.Header>
+                  <Card.Title>Skeleton loading preview</Card.Title>
+                  <Card.Description>Toggle the preview above to see loading placeholders across the interface.</Card.Description>
+                </Card.Header>
+                <Card.Body>
+                  <div aria-busy="true" className="grid gap-4 sm:grid-cols-[auto_1fr] sm:items-center">
+                    <Skeleton shape="circle" className="h-12 w-12" />
+                    <div className="space-y-2">
+                      <Skeleton className="w-2/5" />
+                      <Skeleton className="w-full" />
+                      <Skeleton className="w-4/5" />
+                    </div>
+                  </div>
+                </Card.Body>
+              </Card>
+
               <div className="grid gap-6 md:grid-cols-2">
-                <Card>
+                <Card loading={showLoadingPreview}>
                   <Card.Header>
                     <Card.Title>Team members</Card.Title>
                     <Card.Description>Manage who has access</Card.Description>
@@ -290,7 +318,7 @@ export default function App() {
                   </Card.Footer>
                 </Card>
 
-                <Card as="article" interactive role="button" tabIndex={0} aria-label="Open workspace settings">
+                <Card as="article" interactive role="button" tabIndex={0} aria-label="Open workspace settings" loading={showLoadingPreview}>
                   <Card.Body>
                     <div className="flex items-center justify-between gap-4">
                       <div>
@@ -308,12 +336,12 @@ export default function App() {
           </div>
         </main>
       </div>
-      <Modal open={deleteModalOpen} onOpenChange={setDeleteModalOpen} size="sm">
+      <Modal open={deleteModalOpen} onOpenChange={setDeleteModalOpen} size="sm" loading={showLoadingPreview}>
         <Modal.Header><Modal.Title>Delete project</Modal.Title></Modal.Header>
         <Modal.Body><p className="text-sm text-text-muted">This action cannot be undone. The project and its associated data will be permanently deleted.</p></Modal.Body>
         <Modal.Footer><Button variant="ghost" onClick={() => setDeleteModalOpen(false)}>Cancel</Button><Button variant="destructive" onClick={() => setDeleteModalOpen(false)}>Delete</Button></Modal.Footer>
       </Modal>
-      <Modal open={detailsModalOpen} onOpenChange={setDetailsModalOpen} size="lg">
+      <Modal open={detailsModalOpen} onOpenChange={setDetailsModalOpen} size="lg" loading={showLoadingPreview}>
         <Modal.Header><Modal.Title>Activity details</Modal.Title></Modal.Header>
         <Modal.Body className="space-y-4"><p className="text-sm text-text-muted">This longer example keeps actions visible while its body scrolls.</p>{Array.from({ length: 18 }, (_, index) => <div key={index} className="rounded-md border border-border bg-surface-hover px-3 py-3 text-sm text-text-muted">Activity update {index + 1}: workspace changes were recorded for the rollout plan.</div>)}</Modal.Body>
         <Modal.Footer><Button variant="primary" onClick={() => setDetailsModalOpen(false)}>Done</Button></Modal.Footer>

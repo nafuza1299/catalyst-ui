@@ -5,6 +5,7 @@ import {
   type HTMLAttributes,
   type ReactNode,
 } from "react";
+import { Skeleton } from "../Skeleton/Skeleton";
 
 export interface SideNavItem {
   key: string;
@@ -19,6 +20,8 @@ export interface SideNavProps extends Omit<HTMLAttributes<HTMLElement>, "onSelec
   onSelect?: (key: string) => void;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  /** Replaces nav items with placeholders while navigation data is loading. */
+  loading?: boolean;
 }
 
 const itemBaseClass =
@@ -33,6 +36,7 @@ export function SideNav({
   onSelect,
   open = false,
   onOpenChange,
+  loading = false,
   className = "",
   ...rest
 }: SideNavProps) {
@@ -162,7 +166,7 @@ export function SideNav({
               </p>
             </div>
             <ul className="space-y-1" aria-label="Main navigation">
-              {items.map((item) => (
+              {loading ? <SideNavSkeletonItems /> : items.map((item) => (
                 <li key={item.key} className="list-none">
                   {renderItem(item)}
                 </li>
@@ -214,7 +218,7 @@ export function SideNav({
               </p>
             </div>
             <ul className="space-y-1" aria-label="Mobile navigation">
-              {items.map((item) => (
+              {loading ? <SideNavSkeletonItems /> : items.map((item) => (
                 <li key={item.key} className="list-none">
                   {renderItem(item)}
                 </li>
@@ -226,3 +230,9 @@ export function SideNav({
     </>
   );
 }
+
+function SideNavSkeletonItems() {
+  return <div aria-busy="true" aria-label="Loading navigation" className="space-y-2 px-3 py-2">{Array.from({ length: 4 }, (_, index) => <div key={index} className="flex items-center gap-3"><Skeleton shape="circle" className="h-5 w-5" /><Skeleton className={index === 3 ? "w-2/5" : "w-3/5"} /></div>)}</div>;
+}
+
+SideNav.Skeleton = SideNavSkeletonItems;

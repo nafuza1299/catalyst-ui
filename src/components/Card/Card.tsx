@@ -5,6 +5,7 @@ import {
   type HTMLAttributes,
   type ReactNode,
 } from "react";
+import { Skeleton } from "../Skeleton/Skeleton";
 
 export type CardPadding = "none" | "sm" | "md";
 export type CardAs = "div" | "article";
@@ -16,6 +17,8 @@ export interface CardProps extends HTMLAttributes<HTMLElement> {
   interactive?: boolean;
   /** Semantic wrapper element. Defaults to div. */
   as?: CardAs;
+  /** Replaces content with a built-in card placeholder. */
+  loading?: boolean;
 }
 
 export interface CardSectionProps extends HTMLAttributes<HTMLElement> {
@@ -52,6 +55,7 @@ const CardRoot = forwardRef<HTMLElement, CardProps>(
       as = "div",
       padding = "md",
       interactive = false,
+      loading = false,
       className = "",
       children,
       ...rest
@@ -74,7 +78,7 @@ const CardRoot = forwardRef<HTMLElement, CardProps>(
           .join(" ")}
         {...rest}
       >
-        {children}
+        {loading ? <CardSkeleton /> : children}
       </Component>
     );
   },
@@ -158,10 +162,15 @@ const CardFooter = forwardRef<HTMLElement, CardSectionProps>(
 );
 CardFooter.displayName = "CardFooter";
 
+function CardSkeleton() {
+  return <div aria-busy="true" aria-label="Loading card" className="space-y-4 p-4 sm:p-6"><Skeleton className="w-2/5" /><Skeleton className="w-full" /><Skeleton className="w-4/5" /><Skeleton shape="rect" className="h-20 w-full" /></div>;
+}
+
 export const Card = Object.assign(CardRoot, {
   Header: CardHeader,
   Title: CardTitle,
   Description: CardDescription,
   Body: CardBody,
   Footer: CardFooter,
+  Skeleton: CardSkeleton,
 });

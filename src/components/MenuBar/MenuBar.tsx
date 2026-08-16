@@ -5,6 +5,7 @@ import {
   useState,
   type HTMLAttributes,
 } from "react";
+import { Skeleton } from "../Skeleton/Skeleton";
 
 export interface MenuDropdownItem {
   key: string;
@@ -18,6 +19,8 @@ export interface MenuBarProps extends Omit<HTMLAttributes<HTMLElement>, "onSelec
   mobileOpen?: boolean;
   /** Called when mobile sheet open state changes. */
   onMobileOpenChange?: (open: boolean) => void;
+  /** Replaces navigation slots with layout-matched placeholders. */
+  loading?: boolean;
 }
 
 export interface MenuBarLinkProps extends Omit<HTMLAttributes<HTMLAnchorElement>, "href" | "onClick"> {
@@ -232,6 +235,7 @@ function MenuBarDropdown({ label, items, className = "" }: MenuBarDropdownProps)
 function MenuBar({
   mobileOpen = false,
   onMobileOpenChange,
+  loading = false,
   className = "",
   children,
   ...rest
@@ -309,7 +313,7 @@ function MenuBar({
         {...rest}
       >
         <div className="flex items-center justify-between px-4 py-3 md:px-6 md:py-4">
-          {children}
+          {loading ? <MenuBarSkeleton /> : children}
         </div>
       </nav>
 
@@ -351,7 +355,7 @@ function MenuBar({
         >
           <div className="flex flex-col px-4 py-4 space-y-2">
             {/* Mobile drawer will contain nav items */}
-            {children}
+            {loading ? <MenuBarSkeleton /> : children}
           </div>
         </div>
       </div>
@@ -392,11 +396,16 @@ function MenuBarActions({ className = "", children, ...rest }: MenuBarActionsPro
   );
 }
 
+function MenuBarSkeleton() {
+  return <div aria-busy="true" aria-label="Loading navigation" className="flex w-full items-center justify-between gap-4"><Skeleton className="w-24" /><div className="hidden flex-1 gap-3 md:flex"><Skeleton className="w-16" /><Skeleton className="w-16" /><Skeleton className="w-20" /></div><Skeleton className="w-20" /></div>;
+}
+
 // Attach subcomponents
 MenuBar.Brand = MenuBarBrand;
 MenuBar.Nav = MenuBarNav;
 MenuBar.Link = MenuBarLink;
 MenuBar.Dropdown = MenuBarDropdown;
 MenuBar.Actions = MenuBarActions;
+MenuBar.Skeleton = MenuBarSkeleton;
 
 export { MenuBar };

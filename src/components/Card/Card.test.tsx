@@ -92,4 +92,10 @@ describe('Card Component', () => {
     const card = container.querySelector('div[class*="p-4"]');
     expect(card).toHaveClass('p-4');
   });
+
+  it('replaces content with an accessible skeleton while loading', () => {
+    render(<Card loading>Loaded content</Card>);
+    expect(screen.getByLabelText('Loading card')).toHaveAttribute('aria-busy', 'true');
+    expect(screen.queryByText('Loaded content')).not.toBeInTheDocument();
+  });
 });

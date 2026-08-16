@@ -12,6 +12,7 @@ import {
   type Placement,
 } from "@floating-ui/react";
 import { cloneElement, isValidElement, useId, useState, type ReactElement } from "react";
+import { Skeleton } from "../Skeleton/Skeleton";
 
 export type TooltipSide = "top" | "right" | "bottom" | "left";
 
@@ -24,10 +25,12 @@ export interface TooltipProps {
   delay?: number;
   /** A single interactive or focusable element. */
   children: ReactElement;
+  /** Shows a short placeholder in the tooltip surface. */
+  loading?: boolean;
 }
 
 /** A non-interactive hint for an existing control; use Popover for rich content. */
-export function Tooltip({ content, side = "top", delay = 300, children }: TooltipProps) {
+export function Tooltip({ content, side = "top", delay = 300, loading = false, children }: TooltipProps) {
   const [open, setOpen] = useState(false);
   const id = useId();
   const { refs, floatingStyles, context } = useFloating({
@@ -59,8 +62,11 @@ export function Tooltip({ content, side = "top", delay = 300, children }: Toolti
         className="z-50 max-w-xs rounded-md bg-text px-2 py-1 text-xs font-medium text-bg shadow-elevation"
         {...getFloatingProps()}
       >
-        {content}
+        {loading ? <TooltipSkeleton /> : content}
       </div>
     </FloatingPortal>}
   </>;
 }
+
+export function TooltipSkeleton() { return <Skeleton className="h-2 w-20 bg-bg/30" />; }
+Tooltip.Skeleton = TooltipSkeleton;

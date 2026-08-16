@@ -1,9 +1,10 @@
 import { createContext, forwardRef, useContext, useEffect, useId, useRef, useState, type HTMLAttributes, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "../Button/Button";
+import { Skeleton } from "../Skeleton/Skeleton";
 
 export type ModalSize = "sm" | "md" | "lg";
-export interface ModalProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> { open: boolean; onOpenChange: (open: boolean) => void; size?: ModalSize; closeOnOverlayClick?: boolean; closeOnEscape?: boolean; }
+export interface ModalProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> { open: boolean; onOpenChange: (open: boolean) => void; size?: ModalSize; closeOnOverlayClick?: boolean; closeOnEscape?: boolean; /** Replaces modal content with a loading placeholder. */ loading?: boolean; }
 export interface ModalSectionProps extends HTMLAttributes<HTMLElement> { children?: ReactNode; }
 interface ModalContextValue { close: () => void; titleId: string; }
 
@@ -41,7 +42,7 @@ function useModalBehavior(open: boolean, panelRef: React.RefObject<HTMLDivElemen
   }, [closeOnEscape, open, panelRef]);
 }
 
-const ModalRoot = forwardRef<HTMLDivElement, ModalProps>(({ open, onOpenChange, size = "md", closeOnOverlayClick = true, closeOnEscape = true, className = "", children, ...rest }, forwardedRef) => {
+const ModalRoot = forwardRef<HTMLDivElement, ModalProps>(({ open, onOpenChange, size = "md", closeOnOverlayClick = true, closeOnEscape = true, loading = false, className = "", children, ...rest }, forwardedRef) => {
   const panelRef = useRef<HTMLDivElement | null>(null);
   const titleId = useId();
   const [isVisible, setIsVisible] = useState(false);
@@ -57,7 +58,7 @@ const ModalRoot = forwardRef<HTMLDivElement, ModalProps>(({ open, onOpenChange, 
     <ModalContext.Provider value={{ close: requestClose, titleId }}>
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         <button type="button" aria-label="Close modal" aria-hidden="true" tabIndex={-1} className={["absolute inset-0 bg-black/50 transition-opacity duration-200 motion-reduce:transition-none", isVisible ? "opacity-100" : "opacity-0"].join(" ")} onClick={closeOnOverlayClick ? requestClose : undefined} />
-        <div ref={(node) => { panelRef.current = node; if (typeof forwardedRef === "function") forwardedRef(node); else if (forwardedRef) forwardedRef.current = node; }} role="dialog" aria-modal="true" aria-labelledby={titleId} tabIndex={-1} className={["relative flex max-h-[85vh] w-full flex-col overflow-hidden rounded-lg border border-border bg-surface shadow-elevation transition duration-200 ease-out motion-reduce:transition-none motion-reduce:transform-none", isVisible ? "scale-100 opacity-100" : "scale-95 opacity-0", sizeClasses[size], className].filter(Boolean).join(" ")} {...rest}>{children}</div>
+        <div ref={(node) => { panelRef.current = node; if (typeof forwardedRef === "function") forwardedRef(node); else if (forwardedRef) forwardedRef.current = node; }} role="dialog" aria-modal="true" aria-busy={loading || undefined} aria-label={loading ? "Loading dialog" : undefined} aria-labelledby={loading ? undefined : titleId} tabIndex={-1} className={["relative flex max-h-[85vh] w-full flex-col overflow-hidden rounded-lg border border-border bg-surface shadow-elevation transition duration-200 ease-out motion-reduce:transition-none motion-reduce:transform-none", isVisible ? "scale-100 opacity-100" : "scale-95 opacity-0", sizeClasses[size], className].filter(Boolean).join(" ")} {...rest}>{loading ? <ModalSkeleton /> : children}</div>
       </div>
     </ModalContext.Provider>, document.body,
   );
@@ -76,4 +77,5 @@ const ModalBody = forwardRef<HTMLElement, ModalSectionProps>(({ className = "", 
 ModalBody.displayName = "ModalBody";
 const ModalFooter = forwardRef<HTMLElement, ModalSectionProps>(({ className = "", children, ...rest }, ref) => <footer ref={ref as any} className={["flex flex-col gap-2 border-t border-border px-4 py-3 sm:flex-row sm:items-center sm:justify-end sm:gap-3 sm:px-6", className].filter(Boolean).join(" ")} {...rest}>{children}</footer>);
 ModalFooter.displayName = "ModalFooter";
-export const Modal = Object.assign(ModalRoot, { Header: ModalHeader, Title: ModalTitle, Body: ModalBody, Footer: ModalFooter });
+function ModalSkeleton() { return <div className="space-y-5 p-6"><Skeleton className="w-2/5" /><div className="space-y-3"><Skeleton className="w-full" /><Skeleton className="w-4/5" /><Skeleton className="w-3/5" /></div><div className="flex justify-end gap-3 pt-2"><Skeleton className="h-9 w-20" /><Skeleton className="h-9 w-24" /></div></div>; }
+export const Modal = Object.assign(ModalRoot, { Header: ModalHeader, Title: ModalTitle, Body: ModalBody, Footer: ModalFooter, Skeleton: ModalSkeleton });

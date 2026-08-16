@@ -45,6 +45,10 @@ Follow the Button pattern exactly:
 4. `src/components/ComponentName/ComponentName.playwright.md` (Playwright CLI instructions for browser validation)
 5. Add a row to the component table in `DESIGN_SYSTEM.md`
 
+## Loading content
+
+Use the shared `Skeleton` component for placeholders, or pass `loading` to content-bearing components such as `Card`, `SideNav`, `Modal`, and `Popover`. Skeletons use the design tokens and automatically adapt to light and dark mode.
+
 ## Next components (planned, same pattern)
 
 Card → Table → Side Nav → Menu Bar

@@ -29,4 +29,11 @@ describe("Tag", () => {
     await userEvent.click(button);
     expect(onDismiss).toHaveBeenCalledTimes(1);
   });
+
+  it("replaces its label and dismiss control with a skeleton while loading", () => {
+    render(<Tag dismissible onDismiss={() => {}} loading>Owner</Tag>);
+    expect(screen.getByRole("status", { name: "Loading tag" })).toBeInTheDocument();
+    expect(screen.queryByText("Owner")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
+  });
 });
