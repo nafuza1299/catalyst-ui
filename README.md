@@ -41,7 +41,9 @@ semantic tokens listed in the reference — never invent new colors.
 Follow the Button pattern exactly:
 1. `src/components/ComponentName/ComponentName.tsx`
 2. `src/components/ComponentName/ComponentName.spec.md` (same template as Button's)
-3. Add a row to the component table in `DESIGN_SYSTEM.md`
+3. `src/components/ComponentName/ComponentName.test.tsx` (Jest unit test for core behavior)
+4. `src/components/ComponentName/ComponentName.playwright.md` (Playwright CLI instructions for browser validation)
+5. Add a row to the component table in `DESIGN_SYSTEM.md`
 
 ## Next components (planned, same pattern)
 

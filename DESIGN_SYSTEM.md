@@ -30,7 +30,7 @@ Radius scale: `rounded-sm` (6px), `rounded-md` (8px, default for buttons/inputs)
 | Component | Status | Spec |
 |---|---|---|
 | Button | ✅ built | `src/components/Button/Button.spec.md` |
-| Card | planned | — |
+| Card | ✅ built | `src/components/Card/Card.spec.md` |
 | Table | planned | — |
 | Side Nav | planned | — |
 | Menu Bar | planned | — |
@@ -41,4 +41,9 @@ Radius scale: `rounded-sm` (6px), `rounded-md` (8px, default for buttons/inputs)
 2. Reuse existing components before writing new markup that duplicates one (e.g. don't hand-roll a button with `<div onClick>`).
 3. Mobile-first: write base (unprefixed) classes for mobile, layer `sm:` / `md:` / `lg:` up.
 4. Every interactive element needs a visible focus state — components already handle this; don't strip `focus-visible:` classes.
-5. When a new component is needed, follow the existing pattern: `ComponentName.tsx` + `ComponentName.spec.md` in the same folder, spec written in the same template as Button's.
+5. When a new component is needed, follow the existing pattern: generate all of the following in the same folder:
+   - `ComponentName.tsx` — implementation
+   - `ComponentName.spec.md` — AI-readable usage contract, written in the same template as Button's
+   - `ComponentName.test.tsx` — Jest unit test covering the component's core behavior
+   - `ComponentName.playwright.md` — Playwright CLI instructions for validating the component in the browser
+6. Do not treat the component as complete until the implementation, unit test, and Playwright instruction file are all present and aligned with the design system contract.
