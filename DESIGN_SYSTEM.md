@@ -23,6 +23,20 @@ between light and dark mode via `[data-theme]` on `<html>`.
 | `text-primary-fg` | Text/icon color on top of `bg-primary` |
 | `bg-danger` / `text-danger` | Destructive actions |
 
+### Tag colors
+
+Tag colors are a separate categorical palette, not action or status tokens for
+buttons. Use them only through `Tag` so light and dark values remain paired.
+
+| Token pair | Category |
+|---|---|
+| `bg-tag-blue-bg` / `text-tag-blue-text` | Blue |
+| `bg-tag-green-bg` / `text-tag-green-text` | Green |
+| `bg-tag-amber-bg` / `text-tag-amber-text` | Amber |
+| `bg-tag-red-bg` / `text-tag-red-text` | Red |
+| `bg-tag-purple-bg` / `text-tag-purple-text` | Purple |
+| `bg-tag-gray-bg` / `text-tag-gray-text` | Gray |
+
 Radius scale: `rounded-sm` (6px), `rounded-md` (8px, default for buttons/inputs), `rounded-lg` (12px, default for cards/panels).
 
 ## Components
@@ -31,13 +45,14 @@ Radius scale: `rounded-sm` (6px), `rounded-md` (8px, default for buttons/inputs)
 |---|---|---|
 | Button | ✅ built | `src/components/Button/Button.spec.md` |
 | Card | ✅ built | `src/components/Card/Card.spec.md` |
+| Tag | ✅ built | `src/components/Tag/Tag.spec.md` — non-interactive categorical metadata label with optional dismiss control. |
 | Table | planned | — |
 | Side Nav | ✅ built | `src/components/SideNav/SideNav.spec.md` — routing-agnostic, data-driven nav that accepts `items`, `activeKey`, and `onSelect` without depending on React Router or Next.js `Link`. |
 | Menu Bar | ✅ built | `src/components/MenuBar/MenuBar.spec.md` — top-level app navigation with hybrid slot-based layout (Brand/Nav/Actions) and data-driven dropdown menus. Responsive: desktop horizontal bar, mobile hamburger-triggered sheet. Shares focus-trap and overlay patterns with Side Nav. |
 
 ## Rules for AI-generated UI using this system
 
-1. Only use the semantic tokens listed above — never introduce new colors.
+1. Only use the semantic tokens listed above — never introduce new colors. Tag color tokens are reserved for categorical `Tag` usage.
 2. Reuse existing components before writing new markup that duplicates one (e.g. don't hand-roll a button with `<div onClick>`).
 3. Mobile-first: write base (unprefixed) classes for mobile, layer `sm:` / `md:` / `lg:` up.
 4. Every interactive element needs a visible focus state — components already handle this; don't strip `focus-visible:` classes.

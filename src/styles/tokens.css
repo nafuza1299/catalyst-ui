@@ -36,6 +36,20 @@
   --color-danger: #dc2626;
   --color-danger-fg: #ffffff;
 
+  /* Categorical tag colors. These are intentionally separate from action tokens. */
+  --color-tag-blue-bg: #dbeafe;
+  --color-tag-blue-text: #1d4ed8;
+  --color-tag-green-bg: #dcfce7;
+  --color-tag-green-text: #15803d;
+  --color-tag-amber-bg: #fef3c7;
+  --color-tag-amber-text: #b45309;
+  --color-tag-red-bg: #fee2e2;
+  --color-tag-red-text: #b91c1c;
+  --color-tag-purple-bg: #f3e8ff;
+  --color-tag-purple-text: #7e22ce;
+  --color-tag-gray-bg: #f4f4f5;
+  --color-tag-gray-text: #3f3f46;
+
   --shadow-elevation: 0 1px 2px 0 rgb(0 0 0 / 0.04), 0 1px 3px 0 rgb(0 0 0 / 0.06);
 }
 
@@ -54,6 +68,19 @@
   --color-danger: #ef4444;
   --color-danger-fg: #ffffff;
 
+  --color-tag-blue-bg: #1e3a5f;
+  --color-tag-blue-text: #93c5fd;
+  --color-tag-green-bg: #14532d;
+  --color-tag-green-text: #86efac;
+  --color-tag-amber-bg: #451a03;
+  --color-tag-amber-text: #fcd34d;
+  --color-tag-red-bg: #450a0a;
+  --color-tag-red-text: #fca5a5;
+  --color-tag-purple-bg: #3b0764;
+  --color-tag-purple-text: #d8b4fe;
+  --color-tag-gray-bg: #27272a;
+  --color-tag-gray-text: #d4d4d8;
+
   /* dark mode leans on border, not shadow, for elevation */
   --shadow-elevation: none;
 }
@@ -70,6 +97,18 @@
   --color-primary-fg: var(--color-primary-fg);
   --color-danger: var(--color-danger);
   --color-danger-fg: var(--color-danger-fg);
+  --color-tag-blue-bg: var(--color-tag-blue-bg);
+  --color-tag-blue-text: var(--color-tag-blue-text);
+  --color-tag-green-bg: var(--color-tag-green-bg);
+  --color-tag-green-text: var(--color-tag-green-text);
+  --color-tag-amber-bg: var(--color-tag-amber-bg);
+  --color-tag-amber-text: var(--color-tag-amber-text);
+  --color-tag-red-bg: var(--color-tag-red-bg);
+  --color-tag-red-text: var(--color-tag-red-text);
+  --color-tag-purple-bg: var(--color-tag-purple-bg);
+  --color-tag-purple-text: var(--color-tag-purple-text);
+  --color-tag-gray-bg: var(--color-tag-gray-bg);
+  --color-tag-gray-text: var(--color-tag-gray-text);
   --shadow-elevation: var(--shadow-elevation);
 }
 

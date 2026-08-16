@@ -3,6 +3,7 @@ import { Button } from "./components/Button/Button";
 import { Card } from "./components/Card/Card";
 import { MenuBar } from "./components/MenuBar/MenuBar";
 import { SideNav, type SideNavItem } from "./components/SideNav/SideNav";
+import { Tag, type TagColor } from "./components/Tag/Tag";
 import { useTheme } from "./theme/ThemeProvider";
 
 function HomeIcon() {
@@ -79,6 +80,7 @@ export default function App() {
   const [activeKey, setActiveKey] = useState("overview");
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [menuBarMobileOpen, setMenuBarMobileOpen] = useState(false);
+  const [showBugTag, setShowBugTag] = useState(true);
 
   const contentMap: Record<string, { title: string; eyebrow: string; description: string }> = {
     overview: {
@@ -183,15 +185,37 @@ export default function App() {
                 <Card.Body>
                   <p className="text-sm text-text-muted">{current.description}</p>
                   <div className="mt-4 flex flex-wrap gap-3">
-                    <span className="rounded-md bg-surface-hover px-2.5 py-1.5 text-xs font-medium text-text-muted">
-                      +12.4%
-                    </span>
-                    <span className="rounded-md bg-surface-hover px-2.5 py-1.5 text-xs font-medium text-text-muted">
-                      8 active projects
-                    </span>
-                    <span className="rounded-md bg-surface-hover px-2.5 py-1.5 text-xs font-medium text-text-muted">
-                      2 alerts
-                    </span>
+                    <Tag color="green">+12.4%</Tag>
+                    <Tag color="blue">8 active projects</Tag>
+                    <Tag color="amber">2 alerts</Tag>
+                  </div>
+                </Card.Body>
+              </Card>
+
+              <Card>
+                <Card.Header>
+                  <Card.Title>Tag palette</Card.Title>
+                  <Card.Description>Categorical metadata in both supported sizes.</Card.Description>
+                </Card.Header>
+                <Card.Body className="space-y-4">
+                  <div className="flex flex-wrap items-center gap-2">
+                    {(["blue", "green", "amber", "red", "purple", "gray"] as TagColor[]).map((color) => (
+                      <Tag key={color} color={color}>{color}</Tag>
+                    ))}
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Tag size="sm" color="blue">Small</Tag>
+                    <Tag size="md" color="purple">Medium</Tag>
+                    {showBugTag && (
+                      <Tag color="red" dismissible onDismiss={() => setShowBugTag(false)}>
+                        Bug
+                      </Tag>
+                    )}
+                    {!showBugTag && (
+                      <Button variant="ghost" size="sm" onClick={() => setShowBugTag(true)}>
+                        Restore bug tag
+                      </Button>
+                    )}
                   </div>
                 </Card.Body>
               </Card>
