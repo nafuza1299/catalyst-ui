@@ -32,7 +32,7 @@ Radius scale: `rounded-sm` (6px), `rounded-md` (8px, default for buttons/inputs)
 | Button | ✅ built | `src/components/Button/Button.spec.md` |
 | Card | ✅ built | `src/components/Card/Card.spec.md` |
 | Table | planned | — |
-| Side Nav | planned | — |
+| Side Nav | ✅ built | `src/components/SideNav/SideNav.spec.md` — routing-agnostic, data-driven nav that accepts `items`, `activeKey`, and `onSelect` without depending on React Router or Next.js `Link`. |
 | Menu Bar | planned | — |
 
 ## Rules for AI-generated UI using this system
