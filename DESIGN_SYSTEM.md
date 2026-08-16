@@ -33,7 +33,7 @@ Radius scale: `rounded-sm` (6px), `rounded-md` (8px, default for buttons/inputs)
 | Card | ✅ built | `src/components/Card/Card.spec.md` |
 | Table | planned | — |
 | Side Nav | ✅ built | `src/components/SideNav/SideNav.spec.md` — routing-agnostic, data-driven nav that accepts `items`, `activeKey`, and `onSelect` without depending on React Router or Next.js `Link`. |
-| Menu Bar | planned | — |
+| Menu Bar | ✅ built | `src/components/MenuBar/MenuBar.spec.md` — top-level app navigation with hybrid slot-based layout (Brand/Nav/Actions) and data-driven dropdown menus. Responsive: desktop horizontal bar, mobile hamburger-triggered sheet. Shares focus-trap and overlay patterns with Side Nav. |
 
 ## Rules for AI-generated UI using this system
 

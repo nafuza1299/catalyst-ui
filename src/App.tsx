@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "./components/Button/Button";
 import { Card } from "./components/Card/Card";
+import { MenuBar } from "./components/MenuBar/MenuBar";
 import { SideNav, type SideNavItem } from "./components/SideNav/SideNav";
 import { useTheme } from "./theme/ThemeProvider";
 
@@ -33,6 +34,40 @@ function SettingsIcon() {
   );
 }
 
+function SunIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-4 w-4">
+      <circle cx="12" cy="12" r="4.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M12 1.5v3m0 15v3m10.5-10.5h-3m-15 0h-3" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M19.07 4.93l-2.12 2.12m-10.3 10.3l-2.12 2.12M19.07 19.07l-2.12-2.12m-10.3-10.3l-2.12-2.12" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function MoonIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-4 w-4">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function MenuIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-5 w-5">
+      <path d="M3 6h18M3 12h18M3 18h18" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function XIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-5 w-5">
+      <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 const navItems: SideNavItem[] = [
   { key: "overview", label: "Overview", icon: <HomeIcon /> },
   { key: "team", label: "Team", icon: <TeamIcon /> },
@@ -43,6 +78,7 @@ export default function App() {
   const { theme, toggleTheme } = useTheme();
   const [activeKey, setActiveKey] = useState("overview");
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [menuBarMobileOpen, setMenuBarMobileOpen] = useState(false);
 
   const contentMap: Record<string, { title: string; eyebrow: string; description: string }> = {
     overview: {
@@ -66,7 +102,52 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-bg text-text">
-      <div className="flex min-h-screen">
+      <MenuBar mobileOpen={menuBarMobileOpen} onMobileOpenChange={setMenuBarMobileOpen}>
+        <MenuBar.Brand>
+          <span className="text-lg font-semibold text-primary">Catalyst</span>
+        </MenuBar.Brand>
+
+        <MenuBar.Nav>
+          <MenuBar.Link href="#overview" active>
+            Overview
+          </MenuBar.Link>
+          <MenuBar.Link href="#team">Team</MenuBar.Link>
+          <MenuBar.Dropdown
+            label="Products"
+            items={[
+              { key: "analytics", label: "Analytics", href: "#analytics" },
+              { key: "reports", label: "Reports", href: "#reports" },
+              { key: "insights", label: "Insights", href: "#insights" },
+            ]}
+          />
+        </MenuBar.Nav>
+
+        <MenuBar.Actions>
+          <Button
+            variant="ghost"
+            iconOnly
+            aria-label={theme === "light" ? "Dark mode" : "Light mode"}
+            onClick={toggleTheme}
+          >
+            {theme === "light" ? <MoonIcon /> : <SunIcon />}
+          </Button>
+          <Button variant="primary" size="sm">
+            Sign up
+          </Button>
+          <Button
+            variant="ghost"
+            iconOnly
+            aria-label="Open navigation"
+            aria-expanded={menuBarMobileOpen}
+            onClick={() => setMenuBarMobileOpen(!menuBarMobileOpen)}
+            className="md:hidden"
+          >
+            {menuBarMobileOpen ? <XIcon /> : <MenuIcon />}
+          </Button>
+        </MenuBar.Actions>
+      </MenuBar>
+
+      <div className="flex min-h-[calc(100vh-4rem)]">
         <SideNav
           items={navItems}
           activeKey={activeKey}
@@ -95,10 +176,6 @@ export default function App() {
                   <h1 className="mt-1 text-2xl font-semibold text-text">{current.title}</h1>
                 </div>
               </div>
-
-              <Button variant="secondary" size="sm" onClick={toggleTheme}>
-                {theme === "light" ? "Dark mode" : "Light mode"}
-              </Button>
             </header>
 
             <section className="space-y-6">
