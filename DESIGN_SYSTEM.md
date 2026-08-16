@@ -50,6 +50,8 @@ Radius scale: `rounded-sm` (6px), `rounded-md` (8px, default for buttons/inputs)
 | Side Nav | ✅ built | `src/components/SideNav/SideNav.spec.md` — routing-agnostic, data-driven nav that accepts `items`, `activeKey`, and `onSelect` without depending on React Router or Next.js `Link`. |
 | Menu Bar | ✅ built | `src/components/MenuBar/MenuBar.spec.md` — top-level app navigation with hybrid slot-based layout (Brand/Nav/Actions) and data-driven dropdown menus. Responsive: desktop horizontal bar, mobile hamburger-triggered sheet. Shares focus-trap and overlay patterns with Side Nav. |
 
+| Modal | built | `src/components/Modal/Modal.spec.md` - controlled portal dialog with compound slots, focus trapping, scroll lock, and focus restoration. |
+
 ## Rules for AI-generated UI using this system
 
 1. Only use the semantic tokens listed above — never introduce new colors. Tag color tokens are reserved for categorical `Tag` usage.

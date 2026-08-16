@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "./components/Button/Button";
 import { Card } from "./components/Card/Card";
 import { MenuBar } from "./components/MenuBar/MenuBar";
+import { Modal } from "./components/Modal/Modal";
 import { SideNav, type SideNavItem } from "./components/SideNav/SideNav";
 import { Tag, type TagColor } from "./components/Tag/Tag";
 import { useTheme } from "./theme/ThemeProvider";
@@ -81,6 +82,8 @@ export default function App() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [menuBarMobileOpen, setMenuBarMobileOpen] = useState(false);
   const [showBugTag, setShowBugTag] = useState(true);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
 
   const contentMap: Record<string, { title: string; eyebrow: string; description: string }> = {
     overview: {
@@ -194,6 +197,17 @@ export default function App() {
 
               <Card>
                 <Card.Header>
+                  <Card.Title>Modal examples</Card.Title>
+                  <Card.Description>Focused confirmation and scrollable detail dialogs.</Card.Description>
+                </Card.Header>
+                <Card.Body className="flex flex-wrap gap-3">
+                  <Button variant="destructive" onClick={() => setDeleteModalOpen(true)}>Delete project</Button>
+                  <Button variant="secondary" onClick={() => setDetailsModalOpen(true)}>View activity details</Button>
+                </Card.Body>
+              </Card>
+
+              <Card>
+                <Card.Header>
                   <Card.Title>Tag palette</Card.Title>
                   <Card.Description>Categorical metadata in both supported sizes.</Card.Description>
                 </Card.Header>
@@ -272,6 +286,16 @@ export default function App() {
           </div>
         </main>
       </div>
+      <Modal open={deleteModalOpen} onOpenChange={setDeleteModalOpen} size="sm">
+        <Modal.Header><Modal.Title>Delete project</Modal.Title></Modal.Header>
+        <Modal.Body><p className="text-sm text-text-muted">This action cannot be undone. The project and its associated data will be permanently deleted.</p></Modal.Body>
+        <Modal.Footer><Button variant="ghost" onClick={() => setDeleteModalOpen(false)}>Cancel</Button><Button variant="destructive" onClick={() => setDeleteModalOpen(false)}>Delete</Button></Modal.Footer>
+      </Modal>
+      <Modal open={detailsModalOpen} onOpenChange={setDetailsModalOpen} size="lg">
+        <Modal.Header><Modal.Title>Activity details</Modal.Title></Modal.Header>
+        <Modal.Body className="space-y-4"><p className="text-sm text-text-muted">This longer example keeps actions visible while its body scrolls.</p>{Array.from({ length: 18 }, (_, index) => <div key={index} className="rounded-md border border-border bg-surface-hover px-3 py-3 text-sm text-text-muted">Activity update {index + 1}: workspace changes were recorded for the rollout plan.</div>)}</Modal.Body>
+        <Modal.Footer><Button variant="primary" onClick={() => setDetailsModalOpen(false)}>Done</Button></Modal.Footer>
+      </Modal>
     </div>
   );
 }
