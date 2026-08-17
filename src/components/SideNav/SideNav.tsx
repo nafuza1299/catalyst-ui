@@ -30,7 +30,7 @@ const itemBaseClass =
 const itemInactiveClass = "text-text-muted hover:bg-surface-hover hover:text-text";
 const itemActiveClass = "border-l-2 border-primary bg-primary/10 pl-[0.625rem] text-primary";
 
-export function SideNav({
+export const SideNav = ({
   items,
   activeKey,
   onSelect,
@@ -39,7 +39,7 @@ export function SideNav({
   loading = false,
   className = "",
   ...rest
-}: SideNavProps) {
+}: SideNavProps) => {
   const drawerRef = useRef<HTMLDivElement | null>(null);
   const panelId = useId();
 
@@ -229,10 +229,10 @@ export function SideNav({
       </div>
     </>
   );
-}
+};
 
-function SideNavSkeletonItems() {
+const SideNavSkeletonItems = () => {
   return <div aria-busy="true" aria-label="Loading navigation" className="space-y-2 px-3 py-2">{Array.from({ length: 4 }, (_, index) => <div key={index} className="flex items-center gap-3"><Skeleton shape="circle" className="h-5 w-5" /><Skeleton className={index === 3 ? "w-2/5" : "w-3/5"} /></div>)}</div>;
-}
+};
 
 SideNav.Skeleton = SideNavSkeletonItems;

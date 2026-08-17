@@ -34,7 +34,7 @@ const paddingStyles: Record<CardPadding, string> = {
 const interactiveStyles =
   "cursor-pointer transition-colors duration-150 hover:border-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg";
 
-function hasStructuredCardContent(children: ReactNode): boolean {
+const hasStructuredCardContent = (children: ReactNode): boolean => {
   return Children.toArray(children).some((child) => {
     if (!isValidElement(child)) return false;
 
@@ -47,7 +47,7 @@ function hasStructuredCardContent(children: ReactNode): boolean {
       "CardFooter",
     ].includes(type.displayName ?? "");
   });
-}
+};
 
 const CardRoot = forwardRef<HTMLElement, CardProps>(
   (
@@ -162,9 +162,9 @@ const CardFooter = forwardRef<HTMLElement, CardSectionProps>(
 );
 CardFooter.displayName = "CardFooter";
 
-function CardSkeleton() {
+const CardSkeleton = () => {
   return <div aria-busy="true" aria-label="Loading card" className="space-y-4 p-4 sm:p-6"><Skeleton className="w-2/5" /><Skeleton className="w-full" /><Skeleton className="w-4/5" /><Skeleton shape="rect" className="h-20 w-full" /></div>;
-}
+};
 
 export const Card = Object.assign(CardRoot, {
   Header: CardHeader,

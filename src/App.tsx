@@ -12,7 +12,7 @@ import { Col } from "./components/Grid/Col";
 import { Row } from "./components/Grid/Row";
 import { useTheme } from "./theme/ThemeProvider";
 
-function HomeIcon() {
+const HomeIcon = () => {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-4 w-4">
       <path d="M3 10.5 12 3l9 7.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -21,7 +21,7 @@ function HomeIcon() {
   );
 }
 
-function TeamIcon() {
+const TeamIcon = () => {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-4 w-4">
       <path d="M16 19v-1a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v1" strokeLinecap="round" strokeLinejoin="round" />
@@ -32,7 +32,7 @@ function TeamIcon() {
   );
 }
 
-function SettingsIcon() {
+const SettingsIcon = () => {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-4 w-4">
       <circle cx="12" cy="12" r="3.25" />
@@ -41,7 +41,7 @@ function SettingsIcon() {
   );
 }
 
-function SunIcon() {
+const SunIcon = () => {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-4 w-4">
       <circle cx="12" cy="12" r="4.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -51,7 +51,7 @@ function SunIcon() {
   );
 }
 
-function MoonIcon() {
+const MoonIcon = () => {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-4 w-4">
       <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" strokeLinecap="round" strokeLinejoin="round" />
@@ -59,7 +59,7 @@ function MoonIcon() {
   );
 }
 
-function MenuIcon() {
+const MenuIcon = () => {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-5 w-5">
       <path d="M3 6h18M3 12h18M3 18h18" strokeLinecap="round" strokeLinejoin="round" />
@@ -67,7 +67,7 @@ function MenuIcon() {
   );
 }
 
-function XIcon() {
+const XIcon = () => {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-5 w-5">
       <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" />
@@ -81,7 +81,7 @@ const navItems: SideNavItem[] = [
   { key: "settings", label: "Settings", icon: <SettingsIcon /> },
 ];
 
-export default function App() {
+const App = () => {
   const { theme, toggleTheme } = useTheme();
   const [activeKey, setActiveKey] = useState("overview");
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -354,4 +354,6 @@ export default function App() {
       </Modal>
     </div>
   );
-}
+};
+
+export default App;

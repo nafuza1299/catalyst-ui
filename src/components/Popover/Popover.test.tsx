@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "../Button/Button";
 import { Popover } from "./Popover";
 
-function Example() { const [open, setOpen] = useState(false); return <Popover open={open} onOpenChange={setOpen} trigger={<Button>Filters</Button>}><button type="button">Apply</button></Popover>; }
+const Example = () => { const [open, setOpen] = useState(false); return <Popover open={open} onOpenChange={setOpen} trigger={<Button>Filters</Button>}><button type="button">Apply</button></Popover>; };
 
 describe("Popover", () => {
   it("toggles from its trigger with dialog accessibility", () => {

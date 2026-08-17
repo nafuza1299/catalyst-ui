@@ -57,14 +57,14 @@ const menuItemClass =
   "w-full text-left px-3 py-2 text-sm font-medium rounded-sm transition-colors duration-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
 const menuItemInactiveClass = "text-text hover:bg-surface-hover";
 
-function MenuBarLink({
+const MenuBarLink = ({
   href,
   active = false,
   onClick,
   className = "",
   children,
   ...rest
-}: MenuBarLinkProps) {
+}: MenuBarLinkProps) => {
   const classes = [
     linkBaseClass,
     active ? linkActiveClass : linkInactiveClass,
@@ -86,9 +86,9 @@ function MenuBarLink({
       {children}
     </button>
   );
-}
+};
 
-function MenuBarDropdown({ label, items, className = "" }: MenuBarDropdownProps) {
+const MenuBarDropdown = ({ label, items, className = "" }: MenuBarDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -228,16 +228,16 @@ function MenuBarDropdown({ label, items, className = "" }: MenuBarDropdownProps)
       )}
     </div>
   );
-}
+};
 
-function MenuBar({
+const MenuBar = ({
   mobileOpen = false,
   onMobileOpenChange,
   loading = false,
   className = "",
   children,
   ...rest
-}: MenuBarProps) {
+}: MenuBarProps) => {
   const drawerRef = useRef<HTMLDivElement>(null);
   const panelId = useId();
 
@@ -359,18 +359,18 @@ function MenuBar({
       </div>
     </>
   );
-}
+};
 
 // Subcomponents
-function MenuBarBrand({ className = "", children, ...rest }: MenuBarBrandProps) {
+const MenuBarBrand = ({ className = "", children, ...rest }: MenuBarBrandProps) => {
   return (
     <div className={["flex items-center", className].filter(Boolean).join(" ")} {...rest}>
       {children}
     </div>
   );
-}
+};
 
-function MenuBarNav({ className = "", children, ...rest }: MenuBarNavProps) {
+const MenuBarNav = ({ className = "", children, ...rest }: MenuBarNavProps) => {
   return (
     <nav
       className={[
@@ -384,19 +384,19 @@ function MenuBarNav({ className = "", children, ...rest }: MenuBarNavProps) {
       {children}
     </nav>
   );
-}
+};
 
-function MenuBarActions({ className = "", children, ...rest }: MenuBarActionsProps) {
+const MenuBarActions = ({ className = "", children, ...rest }: MenuBarActionsProps) => {
   return (
     <div className={["flex items-center gap-2 md:gap-3", className].filter(Boolean).join(" ")} {...rest}>
       {children}
     </div>
   );
-}
+};
 
-function MenuBarSkeleton() {
+const MenuBarSkeleton = () => {
   return <div aria-busy="true" aria-label="Loading navigation" className="flex w-full items-center justify-between gap-4"><Skeleton className="w-24" /><div className="hidden flex-1 gap-3 md:flex"><Skeleton className="w-16" /><Skeleton className="w-16" /><Skeleton className="w-20" /></div><Skeleton className="w-20" /></div>;
-}
+};
 
 // Attach subcomponents
 MenuBar.Brand = MenuBarBrand;

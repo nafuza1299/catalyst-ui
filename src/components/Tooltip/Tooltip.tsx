@@ -30,7 +30,7 @@ export interface TooltipProps {
 }
 
 /** A non-interactive hint for an existing control; use Popover for rich content. */
-export function Tooltip({ content, side = "top", delay = 300, loading = false, children }: TooltipProps) {
+export const Tooltip = ({ content, side = "top", delay = 300, loading = false, children }: TooltipProps) => {
   const [open, setOpen] = useState(false);
   const id = useId();
   const { refs, floatingStyles, context } = useFloating({
@@ -66,7 +66,7 @@ export function Tooltip({ content, side = "top", delay = 300, loading = false, c
       </div>
     </FloatingPortal>}
   </>;
-}
+};
 
-export function TooltipSkeleton() { return <Skeleton className="h-2 w-20 bg-bg/30" />; }
+export const TooltipSkeleton = () => { return <Skeleton className="h-2 w-20 bg-bg/30" />; };
 Tooltip.Skeleton = TooltipSkeleton;

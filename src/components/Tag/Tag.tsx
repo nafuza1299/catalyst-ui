@@ -39,12 +39,12 @@ const sizeStyles: Record<TagSize, string> = {
   md: "h-6 px-2.5 text-sm",
 };
 
-function getTextContent(node: ReactNode): string {
+const getTextContent = (node: ReactNode): string => {
   if (typeof node === "string" || typeof node === "number") return String(node);
   if (Array.isArray(node)) return node.map(getTextContent).join("");
   if (isValidElement<{ children?: ReactNode }>(node)) return getTextContent(node.props.children);
   return "";
-}
+};
 
 export const Tag = forwardRef<HTMLSpanElement, TagProps>(
   ({ color = "gray", size = "md", icon, dismissible = false, onDismiss, loading = false, className = "", children, ...rest }, ref) => {

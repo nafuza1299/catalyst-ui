@@ -14,11 +14,11 @@ const focusableSelector = 'a[href], button:not([disabled]), input:not([disabled]
 let lockedModalCount = 0;
 let originalBodyOverflow = "";
 
-function lockBodyScroll() { if (lockedModalCount === 0) originalBodyOverflow = document.body.style.overflow; lockedModalCount += 1; document.body.style.overflow = "hidden"; }
-function unlockBodyScroll() { lockedModalCount = Math.max(0, lockedModalCount - 1); if (lockedModalCount === 0) document.body.style.overflow = originalBodyOverflow; }
-function getFocusableElements(container: HTMLElement) { return Array.from(container.querySelectorAll<HTMLElement>(focusableSelector)).filter((element) => !element.hasAttribute("disabled") && element.getAttribute("aria-hidden") !== "true"); }
+const lockBodyScroll = () => { if (lockedModalCount === 0) originalBodyOverflow = document.body.style.overflow; lockedModalCount += 1; document.body.style.overflow = "hidden"; };
+const unlockBodyScroll = () => { lockedModalCount = Math.max(0, lockedModalCount - 1); if (lockedModalCount === 0) document.body.style.overflow = originalBodyOverflow; };
+const getFocusableElements = (container: HTMLElement) => { return Array.from(container.querySelectorAll<HTMLElement>(focusableSelector)).filter((element) => !element.hasAttribute("disabled") && element.getAttribute("aria-hidden") !== "true"); };
 
-function useModalBehavior(open: boolean, panelRef: React.RefObject<HTMLDivElement | null>, onRequestClose: () => void, closeOnEscape: boolean) {
+const useModalBehavior = (open: boolean, panelRef: React.RefObject<HTMLDivElement | null>, onRequestClose: () => void, closeOnEscape: boolean) => {
   const previouslyFocusedRef = useRef<HTMLElement | null>(null);
   const closeRef = useRef(onRequestClose);
   closeRef.current = onRequestClose;
@@ -40,7 +40,7 @@ function useModalBehavior(open: boolean, panelRef: React.RefObject<HTMLDivElemen
     document.addEventListener("keydown", handleKeyDown);
     return () => { document.removeEventListener("keydown", handleKeyDown); unlockBodyScroll(); previouslyFocusedRef.current?.focus(); };
   }, [closeOnEscape, open, panelRef]);
-}
+};
 
 const ModalRoot = forwardRef<HTMLDivElement, ModalProps>(({ open, onOpenChange, size = "md", closeOnOverlayClick = true, closeOnEscape = true, loading = false, className = "", children, ...rest }, forwardedRef) => {
   const panelRef = useRef<HTMLDivElement | null>(null);
@@ -64,7 +64,7 @@ const ModalRoot = forwardRef<HTMLDivElement, ModalProps>(({ open, onOpenChange, 
   );
 });
 ModalRoot.displayName = "Modal";
-function useModalContext(componentName: string) { const context = useContext(ModalContext); if (!context) throw new Error(`${componentName} must be used within Modal.`); return context; }
+const useModalContext = (componentName: string) => { const context = useContext(ModalContext); if (!context) throw new Error(`${componentName} must be used within Modal.`); return context; };
 
 const ModalHeader = forwardRef<HTMLElement, ModalSectionProps>(({ className = "", children, ...rest }, ref) => {
   const { close } = useModalContext("Modal.Header");
@@ -77,5 +77,5 @@ const ModalBody = forwardRef<HTMLElement, ModalSectionProps>(({ className = "", 
 ModalBody.displayName = "ModalBody";
 const ModalFooter = forwardRef<HTMLElement, ModalSectionProps>(({ className = "", children, ...rest }, ref) => <footer ref={ref as any} className={["flex flex-col gap-2 border-t border-border px-4 py-3 sm:flex-row sm:items-center sm:justify-end sm:gap-3 sm:px-6", className].filter(Boolean).join(" ")} {...rest}>{children}</footer>);
 ModalFooter.displayName = "ModalFooter";
-function ModalSkeleton() { return <div className="space-y-5 p-6"><Skeleton className="w-2/5" /><div className="space-y-3"><Skeleton className="w-full" /><Skeleton className="w-4/5" /><Skeleton className="w-3/5" /></div><div className="flex justify-end gap-3 pt-2"><Skeleton className="h-9 w-20" /><Skeleton className="h-9 w-24" /></div></div>; }
+const ModalSkeleton = () => { return <div className="space-y-5 p-6"><Skeleton className="w-2/5" /><div className="space-y-3"><Skeleton className="w-full" /><Skeleton className="w-4/5" /><Skeleton className="w-3/5" /></div><div className="flex justify-end gap-3 pt-2"><Skeleton className="h-9 w-20" /><Skeleton className="h-9 w-24" /></div></div>; };
 export const Modal = Object.assign(ModalRoot, { Header: ModalHeader, Title: ModalTitle, Body: ModalBody, Footer: ModalFooter, Skeleton: ModalSkeleton });

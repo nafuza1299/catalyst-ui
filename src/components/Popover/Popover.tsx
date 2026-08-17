@@ -35,7 +35,7 @@ export interface PopoverProps {
 }
 
 /** A controlled, non-modal floating panel for rich, interactive content. */
-export function Popover({ open, onOpenChange, trigger, side = "bottom", align = "start", loading = false, children }: PopoverProps) {
+export const Popover = ({ open, onOpenChange, trigger, side = "bottom", align = "start", loading = false, children }: PopoverProps) => {
   const { refs, floatingStyles, context } = useFloating({
     open,
     onOpenChange,
@@ -72,10 +72,10 @@ export function Popover({ open, onOpenChange, trigger, side = "bottom", align = 
       </FloatingFocusManager>
     </FloatingPortal>}
   </>;
-}
+};
 
-export function PopoverSkeleton() {
+export const PopoverSkeleton = () => {
   return <div aria-busy="true" aria-label="Loading popover" className="w-48 space-y-3"><Skeleton className="w-3/5" /><Skeleton className="w-full" /><Skeleton className="w-4/5" /></div>;
-}
+};
 
 Popover.Skeleton = PopoverSkeleton;
