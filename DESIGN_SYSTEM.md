@@ -47,16 +47,17 @@ Radius scale: `rounded-sm` (6px), `rounded-md` (8px, default for buttons/inputs)
 | Card | ✅ built | `src/components/Card/Card.spec.md` |
 | Tag | ✅ built | `src/components/Tag/Tag.spec.md` — non-interactive categorical metadata label with optional dismiss control. |
 | Table | planned | — |
+| Row/Col | ✅ built | `src/components/Grid/Row.tsx`, `Col.tsx` — simple flex-based responsive grid using Tailwind's natural `md:` / `lg:` breakpoints and `gap` utility. |
 | Side Nav | ✅ built | `src/components/SideNav/SideNav.spec.md` — routing-agnostic, data-driven nav that accepts `items`, `activeKey`, and `onSelect` without depending on React Router or Next.js `Link`. |
 | Menu Bar | ✅ built | `src/components/MenuBar/MenuBar.spec.md` — top-level app navigation with hybrid slot-based layout (Brand/Nav/Actions) and data-driven dropdown menus. Responsive: desktop horizontal bar, mobile hamburger-triggered sheet. Shares focus-trap and overlay patterns with Side Nav. |
-
-| Modal | built | `src/components/Modal/Modal.spec.md` - controlled portal dialog with compound slots, focus trapping, scroll lock, and focus restoration. |
-| Tooltip | âœ… built | `src/components/Tooltip/Tooltip.spec.md` â€” delayed hover/focus plain-text hint; uses Floating UI for automatic flip and shift positioning. |
-| Popover | âœ… built | `src/components/Popover/Popover.spec.md` â€” controlled, non-modal rich-content panel; uses Floating UI for positioning and dismissal. Menu Bar dropdown is a future candidate to reuse it internally. |
+| Layout | ✅ built | `src/components/Layout/Layout.spec.md` — app-shell scaffolding that arranges Header, Sider, Content, and Footer. Compound component; delegates responsive behavior to SideNav and MenuBar. |
+| Modal | ✅ built | `src/components/Modal/Modal.spec.md` — controlled portal dialog with compound slots, focus trapping, scroll lock, and focus restoration. |
+| Tooltip | ✅ built | `src/components/Tooltip/Tooltip.spec.md` — delayed hover/focus plain-text hint; uses Floating UI for automatic flip and shift positioning. |
+| Popover | ✅ built | `src/components/Popover/Popover.spec.md` — controlled, non-modal rich-content panel; uses Floating UI for positioning and dismissal. |
 
 ## Loading states
 
-Use `Skeleton` for loading content, wrapped in a region with `aria-busy="true"`. Content-bearing components accept `loading` where appropriate: `Card`, `Tag`, `SideNav`, `MenuBar`, `Modal`, `Popover`, and `Tooltip`. Compound components expose a matching `.Skeleton` variant for composing custom layouts. `Button` retains its spinner-based `loading` state.
+Use `Skeleton` for loading content, wrapped in a region with `aria-busy="true"`. Content-bearing components accept `loading` where appropriate: `Card`, `Tag`, `SideNav`, `MenuBar`, `Layout`, `Modal`, `Popover`, and `Tooltip`. Compound components expose a matching `.Skeleton` variant for composing custom layouts. `Button` retains its spinner-based `loading` state.
 
 ## Rules for AI-generated UI using this system
 
@@ -70,3 +71,73 @@ Use `Skeleton` for loading content, wrapped in a region with `aria-busy="true"`.
    - `ComponentName.test.tsx` — Jest unit test covering the component's core behavior
    - `ComponentName.playwright.md` — Playwright CLI instructions for validating the component in the browser
 6. Do not treat the component as complete until the implementation, unit test, and Playwright instruction file are all present and aligned with the design system contract.
+
+## Assembling a full page with Layout
+
+Layout is the outermost container; it orchestrates Header (menu bar), optional Sider (side nav drawer), Content (main area), and Footer. Use this pattern for most app shells:
+
+```jsx
+import { Layout } from "./components/Layout/Layout";
+import { MenuBar } from "./components/MenuBar/MenuBar";
+import { SideNav } from "./components/SideNav/SideNav";
+import { Card } from "./components/Card/Card";
+
+export function App() {
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [activeNav, setActiveNav] = useState("dashboard");
+
+  return (
+    <Layout>
+      {/* Top navigation bar */}
+      <Layout.Header>
+        <MenuBar mobileOpen={menuBarOpen} onMobileOpenChange={setMenuBarOpen}>
+          <MenuBar.Brand>Brand Name</MenuBar.Brand>
+          <MenuBar.Nav>
+            <MenuBar.Link href="/">Home</MenuBar.Link>
+            <MenuBar.Link href="/docs">Docs</MenuBar.Link>
+          </MenuBar.Nav>
+          <MenuBar.Actions>
+            {/* theme toggle, profile, etc. */}
+          </MenuBar.Actions>
+        </MenuBar>
+      </Layout.Header>
+
+      {/* Inner layout: sidebar + content row */}
+      <Layout hasSider>
+        <Layout.Sider width={240} collapsible collapsed={false} breakpoint="lg">
+          <SideNav
+            items={[
+              { key: "dashboard", label: "Dashboard", icon: <Icon /> },
+              { key: "settings", label: "Settings", icon: <Icon /> },
+            ]}
+            activeKey={activeNav}
+            onSelect={setActiveNav}
+          />
+        </Layout.Sider>
+
+        <Layout.Content>
+          {/* Your page content: Cards, Tables, Forms, etc. */}
+          <Card>
+            <Card.Header>
+              <Card.Title>Page Title</Card.Title>
+            </Card.Header>
+            <Card.Body>Page content here</Card.Body>
+          </Card>
+        </Layout.Content>
+      </Layout>
+
+      {/* Footer */}
+      <Layout.Footer>© 2026 Your Company. All rights reserved.</Layout.Footer>
+    </Layout>
+  );
+}
+```
+
+Key patterns:
+- Outer `Layout` stacks Header/body/Footer vertically.
+- Inner `Layout hasSider` arranges Sider + Content horizontally.
+- `Layout.Sider` and `SideNav` must use the **same breakpoint** for consistent mobile behavior.
+- Layout itself doesn't handle responsive collapse — that's delegated to `SideNav` and `MenuBar`, which each own their own mobile drawer/sheet logic.
+- Footer is optional.
+
+This nesting approach (vs. a single component with many props) keeps the contract simple and makes arbitrary combinations (header-only, sidebar-only, both, sider-on-right) possible without an explosion of conditional styling.

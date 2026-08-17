@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "./components/Button/Button";
 import { Card } from "./components/Card/Card";
+import { Layout } from "./components/Layout/Layout";
 import { MenuBar } from "./components/MenuBar/MenuBar";
 import { Modal } from "./components/Modal/Modal";
 import { Popover } from "./components/Popover/Popover";
@@ -113,75 +114,70 @@ const App = () => {
   const current = contentMap[activeKey] ?? contentMap.overview;
 
   return (
-    <div className="min-h-screen bg-bg text-text">
-      <MenuBar mobileOpen={menuBarMobileOpen} onMobileOpenChange={setMenuBarMobileOpen} loading={showLoadingPreview}>
-        <MenuBar.Brand>
-          <span className="text-lg font-semibold text-primary">Catalyst</span>
-        </MenuBar.Brand>
+    <Layout>
+      <Layout.Header>
+        <MenuBar mobileOpen={menuBarMobileOpen} onMobileOpenChange={setMenuBarMobileOpen} loading={showLoadingPreview}>
+          <MenuBar.Brand>
+            <span className="text-lg font-semibold text-primary">Catalyst</span>
+          </MenuBar.Brand>
 
-        <MenuBar.Nav>
-          <MenuBar.Link href="#overview" active>
-            Overview
-          </MenuBar.Link>
-          <MenuBar.Link href="#team">Team</MenuBar.Link>
-          <MenuBar.Dropdown
-            label="Products"
-            items={[
-              { key: "analytics", label: "Analytics", href: "#analytics" },
-              { key: "reports", label: "Reports", href: "#reports" },
-              { key: "insights", label: "Insights", href: "#insights" },
-            ]}
+          <MenuBar.Nav>
+            <MenuBar.Link href="#overview" active>
+              Overview
+            </MenuBar.Link>
+            <MenuBar.Link href="#team">Team</MenuBar.Link>
+            <MenuBar.Dropdown
+              label="Products"
+              items={[
+                { key: "analytics", label: "Analytics", href: "#analytics" },
+                { key: "reports", label: "Reports", href: "#reports" },
+                { key: "insights", label: "Insights", href: "#insights" },
+              ]}
+            />
+          </MenuBar.Nav>
+
+          <MenuBar.Actions>
+            <Button
+              variant="ghost"
+              iconOnly
+              aria-label={theme === "light" ? "Dark mode" : "Light mode"}
+              onClick={toggleTheme}
+            >
+              {theme === "light" ? <MoonIcon /> : <SunIcon />}
+            </Button>
+            <Button variant="primary" size="sm">
+              Sign up
+            </Button>
+            <Button
+              variant="ghost"
+              iconOnly
+              aria-label="Open navigation"
+              aria-expanded={menuBarMobileOpen}
+              onClick={() => setMenuBarMobileOpen(!menuBarMobileOpen)}
+              className="md:hidden"
+            >
+              {menuBarMobileOpen ? <XIcon /> : <MenuIcon />}
+            </Button>
+          </MenuBar.Actions>
+        </MenuBar>
+      </Layout.Header>
+
+      <Layout hasSider>
+        <Layout.Sider width={240} collapsible collapsed={false} breakpoint="lg">
+          <SideNav
+            items={navItems}
+            activeKey={activeKey}
+            onSelect={setActiveKey}
+            open={mobileNavOpen}
+            onOpenChange={setMobileNavOpen}
+            loading={showLoadingPreview}
           />
-        </MenuBar.Nav>
+        </Layout.Sider>
 
-        <MenuBar.Actions>
-          <Button
-            variant="ghost"
-            iconOnly
-            aria-label={theme === "light" ? "Dark mode" : "Light mode"}
-            onClick={toggleTheme}
-          >
-            {theme === "light" ? <MoonIcon /> : <SunIcon />}
-          </Button>
-          <Button variant="primary" size="sm">
-            Sign up
-          </Button>
-          <Button
-            variant="ghost"
-            iconOnly
-            aria-label="Open navigation"
-            aria-expanded={menuBarMobileOpen}
-            onClick={() => setMenuBarMobileOpen(!menuBarMobileOpen)}
-            className="md:hidden"
-          >
-            {menuBarMobileOpen ? <XIcon /> : <MenuIcon />}
-          </Button>
-        </MenuBar.Actions>
-      </MenuBar>
-
-      <div className="flex min-h-[calc(100vh-4rem)]">
-        <SideNav
-          items={navItems}
-          activeKey={activeKey}
-          onSelect={setActiveKey}
-          open={mobileNavOpen}
-          onOpenChange={setMobileNavOpen}
-          loading={showLoadingPreview}
-        />
-
-        <main className="flex-1 p-4 sm:p-8 lg:p-10">
+        <Layout.Content>
           <div className="mx-auto max-w-5xl">
             <header className="mb-8 flex items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <button
-                  type="button"
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border bg-surface text-text hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg lg:hidden"
-                  aria-label="Open navigation"
-                  onClick={() => setMobileNavOpen(true)}
-                >
-                  ☰
-                </button>
-
                 <div>
                   <p className="text-xs font-medium uppercase tracking-[0.12em] text-text-muted">
                     {current.eyebrow}
@@ -340,8 +336,13 @@ const App = () => {
               </Row>
             </section>
           </div>
-        </main>
-      </div>
+        </Layout.Content>
+      </Layout>
+
+      <Layout.Footer>
+        © 2026 Catalyst. All rights reserved.
+      </Layout.Footer>
+
       <Modal open={deleteModalOpen} onOpenChange={setDeleteModalOpen} size="sm" loading={showLoadingPreview}>
         <Modal.Header><Modal.Title>Delete project</Modal.Title></Modal.Header>
         <Modal.Body><p className="text-sm text-text-muted">This action cannot be undone. The project and its associated data will be permanently deleted.</p></Modal.Body>
@@ -352,7 +353,7 @@ const App = () => {
         <Modal.Body className="space-y-4"><p className="text-sm text-text-muted">This longer example keeps actions visible while its body scrolls.</p>{Array.from({ length: 18 }, (_, index) => <div key={index} className="rounded-md border border-border bg-surface-hover px-3 py-3 text-sm text-text-muted">Activity update {index + 1}: workspace changes were recorded for the rollout plan.</div>)}</Modal.Body>
         <Modal.Footer><Button variant="primary" onClick={() => setDetailsModalOpen(false)}>Done</Button></Modal.Footer>
       </Modal>
-    </div>
+    </Layout>
   );
 };
 
