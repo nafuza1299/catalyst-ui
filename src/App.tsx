@@ -8,6 +8,8 @@ import { SideNav, type SideNavItem } from "./components/SideNav/SideNav";
 import { Tag, type TagColor } from "./components/Tag/Tag";
 import { Tooltip } from "./components/Tooltip/Tooltip";
 import { Skeleton } from "./components/Skeleton/Skeleton";
+import { Col } from "./components/Grid/Col";
+import { Row } from "./components/Grid/Row";
 import { useTheme } from "./theme/ThemeProvider";
 
 function HomeIcon() {
@@ -284,54 +286,58 @@ export default function App() {
                 </Card.Body>
               </Card>
 
-              <div className="grid gap-6 md:grid-cols-2">
-                <Card loading={showLoadingPreview}>
-                  <Card.Header>
-                    <Card.Title>Team members</Card.Title>
-                    <Card.Description>Manage who has access</Card.Description>
-                  </Card.Header>
-                  <Card.Body>
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between rounded-md border border-border bg-surface-hover px-3 py-2">
-                        <div>
-                          <p className="font-medium text-text">Alicia Gomez</p>
-                          <p className="text-sm text-text-muted">Product lead</p>
+              <Row gutter={[24, 24]}>
+                <Col span={12} md={6}>
+                  <Card loading={showLoadingPreview}>
+                    <Card.Header>
+                      <Card.Title>Team members</Card.Title>
+                      <Card.Description>Manage who has access</Card.Description>
+                    </Card.Header>
+                    <Card.Body>
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between rounded-md border border-border bg-surface-hover px-3 py-2">
+                          <div>
+                            <p className="font-medium text-text">Alicia Gomez</p>
+                            <p className="text-sm text-text-muted">Product lead</p>
+                          </div>
+                          <span className="rounded-full bg-surface px-2 py-1 text-xs text-text-muted">
+                            Owner
+                          </span>
                         </div>
-                        <span className="rounded-full bg-surface px-2 py-1 text-xs text-text-muted">
-                          Owner
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between rounded-md border border-border bg-surface-hover px-3 py-2">
-                        <div>
-                          <p className="font-medium text-text">Liam Chen</p>
-                          <p className="text-sm text-text-muted">Design systems</p>
+                        <div className="flex items-center justify-between rounded-md border border-border bg-surface-hover px-3 py-2">
+                          <div>
+                            <p className="font-medium text-text">Liam Chen</p>
+                            <p className="text-sm text-text-muted">Design systems</p>
+                          </div>
+                          <span className="rounded-full bg-surface px-2 py-1 text-xs text-text-muted">
+                            Editor
+                          </span>
                         </div>
-                        <span className="rounded-full bg-surface px-2 py-1 text-xs text-text-muted">
-                          Editor
-                        </span>
                       </div>
-                    </div>
-                  </Card.Body>
-                  <Card.Footer>
-                    <Button variant="ghost">Cancel</Button>
-                    <Button variant="primary">Save</Button>
-                  </Card.Footer>
-                </Card>
+                    </Card.Body>
+                    <Card.Footer>
+                      <Button variant="ghost">Cancel</Button>
+                      <Button variant="primary">Save</Button>
+                    </Card.Footer>
+                  </Card>
+                </Col>
 
-                <Card as="article" interactive role="button" tabIndex={0} aria-label="Open workspace settings" loading={showLoadingPreview}>
-                  <Card.Body>
-                    <div className="flex items-center justify-between gap-4">
-                      <div>
-                        <p className="text-sm text-text-muted">Workspace</p>
-                        <h3 className="mt-1 text-lg font-semibold text-text">Q3 rollout planning</h3>
+                <Col span={12} md={6}>
+                  <Card as="article" interactive role="button" tabIndex={0} aria-label="Open workspace settings" loading={showLoadingPreview}>
+                    <Card.Body>
+                      <div className="flex items-center justify-between gap-4">
+                        <div>
+                          <p className="text-sm text-text-muted">Workspace</p>
+                          <h3 className="mt-1 text-lg font-semibold text-text">Q3 rollout planning</h3>
+                        </div>
+                        <span className="rounded-md border border-border bg-surface px-2 py-1 text-xs text-text-muted">
+                          View
+                        </span>
                       </div>
-                      <span className="rounded-md border border-border bg-surface px-2 py-1 text-xs text-text-muted">
-                        View
-                      </span>
-                    </div>
-                  </Card.Body>
-                </Card>
-              </div>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              </Row>
             </section>
           </div>
         </main>
