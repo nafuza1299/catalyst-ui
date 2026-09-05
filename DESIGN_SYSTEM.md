@@ -54,6 +54,9 @@ Radius scale: `rounded-sm` (6px), `rounded-md` (8px, default for buttons/inputs)
 | Modal | ✅ built | `src/components/Modal/Modal.spec.md` — controlled portal dialog with compound slots, focus trapping, scroll lock, and focus restoration. |
 | Tooltip | ✅ built | `src/components/Tooltip/Tooltip.spec.md` — delayed hover/focus plain-text hint; uses Floating UI for automatic flip and shift positioning. |
 | Popover | ✅ built | `src/components/Popover/Popover.spec.md` — controlled, non-modal rich-content panel; uses Floating UI for positioning and dismissal. |
+| MultiSelect | ✅ built | `src/components/MultiSelect/MultiSelect.tsx` — token-styled `react-select` with `Tag` chips, min/max limits, and Select all / Clear all. Edits buffer while the menu is open and commit on close. |
+| YearRangePicker | ✅ built | `src/components/YearRangePicker/YearRangePicker.tsx` — two-click year range popover, portalled to `<body>` so an `overflow-hidden` ancestor can't clip it. |
+| ThemeToggle | ✅ built | `src/components/ThemeToggle/ThemeToggle.tsx` — icon-only light/dark switch over `useTheme`. |
 
 ## Loading states
 

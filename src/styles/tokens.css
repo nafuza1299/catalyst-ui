@@ -117,3 +117,32 @@ body {
   color: var(--color-text);
   font-family: var(--font-sans);
 }
+
+/* @layer base so utility overrides (e.g. a scrollbar-hiding class on a tab
+   bar) still win in the cascade over this default. */
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: var(--color-border);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-text-muted);
+  }
+}
