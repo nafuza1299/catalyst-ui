@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Select, {
   components as RSComponents,
   type ClassNamesConfig,
+  type InputProps,
   type MenuProps,
   type MultiValue as RSMultiValue,
   type MultiValueProps,
@@ -34,7 +35,7 @@ const classNames: ClassNamesConfig<MultiSelectOption, true> = {
     ].join(' '),
   valueContainer: () => 'gap-1 py-1 max-h-20 overflow-y-auto',
   placeholder: () => 'text-text-muted text-sm',
-  input: () => 'text-text text-sm',
+  input: () => 'text-text text-sm min-h-6',
   indicatorSeparator: () => 'bg-border',
   dropdownIndicator: () => 'text-text-muted',
   clearIndicator: () => 'text-text-muted',
@@ -43,6 +44,10 @@ const classNames: ClassNamesConfig<MultiSelectOption, true> = {
   menuList: () => 'max-h-72 overflow-y-auto py-1',
   noOptionsMessage: () => 'px-3 py-2 text-sm text-text-muted',
 }
+
+const SearchInput = (props: InputProps<MultiSelectOption, true>) => (
+  <RSComponents.Input {...props} inputClassName="min-w-6!" />
+)
 
 export function MultiSelect({ label, options, value, onChange, max, min = 0 }: MultiSelectProps) {
   // While the dropdown is open, edits are buffered here instead of calling
@@ -157,7 +162,11 @@ export function MultiSelect({ label, options, value, onChange, max, min = 0 }: M
         isOptionDisabled={(option) =>
           effective.includes(option.value) ? effective.length <= min : max !== undefined && effective.length >= max
         }
-        components={{ Option, MultiValue, Menu }}
+        // react-select sizes the search input to the text typed into it, so while
+        // it is empty it is a ~4x20px focusable target — under the 24x24 minimum
+        // of WCAG 2.5.8. `classNames.input` styles the wrapper, not the input, so
+        // the floor has to go on through `inputClassName`.
+        components={{ Option, MultiValue, Menu, Input: SearchInput }}
         classNames={classNames}
         menuPortalTarget={document.body}
         className="w-64"

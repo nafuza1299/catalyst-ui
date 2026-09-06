@@ -30,6 +30,10 @@
         }
       })();
     </script>
+    <!-- Without this the browser requests /favicon.ico, which the SPA rewrite
+         answers with a 404 — a console error Lighthouse reports as a defect. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
     <title>Catalyst UI — token-driven React component library</title>
     <meta
       name="description"

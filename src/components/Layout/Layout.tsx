@@ -75,6 +75,15 @@ export interface LayoutSiderProps extends HTMLAttributes<HTMLDivElement> {
   children?: ReactNode;
 }
 
+const BREAKPOINT_PIXELS: Record<"sm" | "md" | "lg", number> = {
+  sm: 640,
+  md: 768,
+  lg: 1024,
+};
+
+const isNarrowerThan = (breakpoint: "sm" | "md" | "lg") =>
+  typeof window !== "undefined" && window.innerWidth < BREAKPOINT_PIXELS[breakpoint];
+
 const LayoutSider = forwardRef<HTMLDivElement, LayoutSiderProps>(
   (
     {
@@ -90,19 +99,18 @@ const LayoutSider = forwardRef<HTMLDivElement, LayoutSiderProps>(
     },
     ref
   ) => {
-    const [isMobile, setIsMobile] = useState(false);
+    // Read the viewport during the first render, not from the mount effect.
+    // Starting at `false` meant a mobile load painted the 240px sider and then
+    // animated it closed — 200ms of width transition, and a layout shift in the
+    // content beside it on every frame of it. That alone was CLS 0.6 in
+    // Lighthouse's 412px emulation. The `window` guard keeps this usable under
+    // SSR, where the server render is desktop and the effect corrects it.
+    const [isMobile, setIsMobile] = useState(() => isNarrowerThan(breakpoint));
 
     // Sync mobile state with breakpoint and call onCollapse when it changes
     useEffect(() => {
-      const breakpointPixels: Record<"sm" | "md" | "lg", number> = {
-        sm: 640,
-        md: 768,
-        lg: 1024,
-      };
-      const breakpointValue = breakpointPixels[breakpoint];
-
       const handleResize = () => {
-        const shouldBeMobile = window.innerWidth < breakpointValue;
+        const shouldBeMobile = isNarrowerThan(breakpoint);
         if (shouldBeMobile !== isMobile) {
           setIsMobile(shouldBeMobile);
           // Notify parent when breakpoint is crossed

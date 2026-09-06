@@ -8,7 +8,7 @@ Layout primitive for grouping related content. Use when content naturally belong
 |---|---|---|---|
 | `padding` | `"none" \| "sm" \| "md"` | `"md"` | Controls the default spacing for standalone cards. `none` removes padding entirely. |
 | `interactive` | `boolean` | `false` | Adds hover/focus affordance and pointer cursor for clickable cards. |
-| `as` | `"div" \| "article"` | `"div"` | Semantic override. Use `article` for self-contained content. |
+| `as` | `"div" \| "article"` | `"div"` | Semantic override. Use `article` for self-contained content — but not together with `role="button"`, which ARIA does not allow on `<article>`. |
 | `className` | `string` | `""` | Extra utility classes. Keep to layout or spacing overrides only. |
 | `children` | `ReactNode` | — | Any valid content. Use `Card.Header`, `Card.Body`, and `Card.Footer` for structured layouts. |
 | ...rest | any native props for the chosen root element | — | Passed through to the underlying element. |
@@ -32,6 +32,7 @@ Fully automatic — all colors and borders derive from design tokens (`bg-surfac
 ## Do / Don't
 
 - ✅ Do use `Card.Header`, `Card.Body`, and `Card.Footer` when a layout has distinct sections.
+- ✅ Do treat `Card.Title` as the page's second heading level — it renders an `<h2>`, so a card under the page `<h1>` never skips a level.
 - ✅ Do use `padding="none"` for stat cards or image-first cards that already provide their own spacing.
 - ✅ Do keep the action row in `Card.Footer` with mobile full-width buttons when needed.
 - ❌ Don't add random hard-coded colors or shadows to override the token system.
@@ -60,7 +61,7 @@ import { Card } from "@/components/Card/Card";
   </Card.Footer>
 </Card>
 
-<Card padding="none" interactive as="article" role="button" tabIndex={0}>
+<Card padding="none" interactive role="button" tabIndex={0}>
   <img src="/team.jpg" alt="Team" className="h-48 w-full object-cover" />
   <div className="p-4 sm:p-6">
     <p className="text-sm text-text-muted">Operations</p>

@@ -320,7 +320,11 @@ const App = () => {
                 </Col>
 
                 <Col span={12} md={6}>
-                  <Card as="article" interactive role="button" tabIndex={0} aria-label="Open workspace settings" loading={showLoadingPreview}>
+                  {/* Not `as="article"`: role="button" is not an allowed role for
+                      <article>. And no aria-label — one that does not contain the
+                      card's own visible text fails "Label in Name" (WCAG 2.5.3),
+                      so the content names it. */}
+                  <Card interactive role="button" tabIndex={0} loading={showLoadingPreview}>
                     <Card.Body>
                       <div className="flex items-center justify-between gap-4">
                         <div>

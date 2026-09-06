@@ -103,7 +103,9 @@ CardHeader.displayName = "CardHeader";
 
 const CardTitle = forwardRef<HTMLElement, CardSectionProps>(
   ({ className = "", children, ...rest }, ref) => (
-    <h3
+    // h2, not h3: a card is a section of the page it sits on, so under the
+    // page's h1 anything deeper skips a level and fails heading-order.
+    <h2
       ref={ref as any}
       className={["text-base font-semibold text-text", className]
         .filter(Boolean)
@@ -111,7 +113,7 @@ const CardTitle = forwardRef<HTMLElement, CardSectionProps>(
       {...rest}
     >
       {children}
-    </h3>
+    </h2>
   ),
 );
 CardTitle.displayName = "CardTitle";

@@ -26,7 +26,9 @@ export const WithSections: Story = {
 }
 
 // `interactive` only supplies the hover and focus affordance. The caller still
-// owns the role, tabIndex and label that make the card actually operable.
+// owns the role and tabIndex that make the card actually operable. The name comes
+// from the card's own text: an aria-label that does not contain the visible text
+// fails "Label in Name" (WCAG 2.5.3).
 export const Interactive: Story = {
   render: (args) => (
     <Card
@@ -34,7 +36,6 @@ export const Interactive: Story = {
       interactive
       role="button"
       tabIndex={0}
-      aria-label="Open workspace settings"
       className="max-w-md"
     >
       <Card.Body>

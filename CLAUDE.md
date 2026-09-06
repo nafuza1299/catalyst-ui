@@ -94,7 +94,11 @@ The failure surfaces in the wrong test, which is what makes it expensive to find
 
 **jsdom's `window.innerWidth` defaults to 1024**, which equals the `lg` breakpoint, so
 `Layout.Sider` mounts in its *non*-mobile branch. Reaching the mobile branch takes an
-explicit `window.innerWidth = 800` plus a dispatched `resize` event.
+explicit `window.innerWidth = 800`. `Sider` reads the width in its `useState`
+initializer, so setting it before `render` is enough; changing it on an already
+mounted `Sider` also needs a dispatched `resize` event. That initializer is not
+an optimisation — starting at "desktop" and correcting in the effect animated the
+240px sider closed on every mobile load, which was CLS 0.6 on its own.
 
 Playwright runs at 1280px on purpose. `SideNav` and `MenuBar` keep their closed mobile
 drawers mounted, so below 1024px every nav item exists twice and bare role queries go
