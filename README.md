@@ -33,11 +33,20 @@ the interesting part. What is:
 
 - **One data attribute is the entire theming mechanism.** `[data-theme="dark"]` on
   `<html>` plus a `@custom-variant` — no class swapping, no CSS-in-JS, no theme prop
-  on any component. Three separate consumers honour that same contract without
-  knowing about each other: the app (`src/theme/ThemeProvider.tsx`), Storybook's
-  toolbar (`.storybook/preview.ts`, which sets the attribute *instead of* mounting
-  the provider, so the two don't fight over it), and the e2e suite (which seeds
-  `localStorage` directly). Break the mechanism and all three fail together.
+  on any component. Four separate consumers honour that same contract without
+  knowing about each other: a blocking script in `index.html` that resolves the theme
+  *before first paint*, the app (`src/theme/ThemeProvider.tsx`), Storybook's toolbar
+  (`.storybook/preview.ts`, which sets the attribute *instead of* mounting the
+  provider, so the two don't fight over it), and the e2e suite (which seeds
+  `localStorage` directly). Break the mechanism and all four fail together.
+
+  The ordering is the interesting half: the attribute outranks `localStorage`, because
+  the script has already painted with it and React's first render has to agree with
+  what is on screen. That one rule is also what makes the library render under SSR —
+  a Next.js host sets the attribute in its own `<head>` and everything downstream is
+  unchanged. `getInitialTheme` is a `useState` initializer, so it runs on the server
+  too; it was `localStorage`-first and unguarded until a Next.js consumer proved it
+  could not be.
 
 - **The tokens are the API, and the components may not bypass them.**
   `src/styles/tokens.css` is the only place a color is written down. Categorical tag
@@ -103,9 +112,26 @@ since it only arranges things that already existed), then the three filter contr
 - **No barrel `index.ts`,** so every import is a deep relative path. That is precisely
   what makes directory-copy vendoring work: a barrel would let a partial copy compile
   and then fail at runtime.
-- **`ThemeProvider` reads `localStorage` and `matchMedia` unguarded at init.** Fine in
-  a browser; any test or SSR host has to stub `matchMedia` first, since jsdom does not
-  ship it. See the stub at the top of `ThemeToggle.test.tsx`.
+- **`ThemeProvider` still reaches for `matchMedia` unguarded.** It no longer touches
+  `localStorage` before checking for a `document`, so it renders under SSR — but the
+  OS-preference fallback assumes `matchMedia` exists, and jsdom does not ship it. Any
+  test mounting the provider has to stub it first; see the top of `ThemeToggle.test.tsx`.
+
+- **Sub-components attached with `Object.assign` are invisible to a React Server
+  Component.** A `"use client"` module reaches the server as a proxy over its *named
+  exports*, and the server never executes the module — so `Card.Header` is `undefined`
+  there, `<Card.Header>` builds an element with no `type`, and `Card`'s own
+  `hasStructuredCardContent` crashes reading `type.displayName`. The stack points into
+  this library rather than at the import that caused it. An SSR consumer has to
+  re-export each sub-component under a flat name it can reference directly. This is
+  the cost of the `Object.assign` invariant, and it is only payable from outside.
+
+- **`ThemeToggle` is the one component whose markup depends on the theme** — a sun or
+  a moon, and an `aria-label` naming the other mode. Everything else is themed purely
+  by CSS hanging off `[data-theme]`, so server and client emit identical markup. This
+  one cannot: the theme lives in `localStorage`, a server has to guess, and every
+  visitor whose real theme is dark gets a hydration mismatch on that label. An SSR
+  host must either defer this component to the client or move the theme into a cookie.
 - **Closed mobile drawers stay mounted** in `SideNav` and `MenuBar`, with a focusable
   close button under `aria-hidden`. At desktop widths they are `display:none` so axe
   is clean, but they would need `inert` before a mobile a11y audit passes — which is

@@ -1,8 +1,35 @@
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--
+      Resolve the theme before first paint. This replaced a hardcoded
+      data-theme="light" on <html>, which was a lie whenever the visitor had
+      chosen dark: the page painted light, then ThemeProvider's effect flipped it
+      after hydration, so every load flashed white.
+
+      Blocking and inline on purpose — a deferred or external script runs after
+      the first paint, which is the whole thing being avoided. ThemeProvider reads
+      this attribute as its initial state, so the two can never disagree, and an
+      SSR host does exactly this in its own <head>.
+    -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("design-system-theme");
+          if (t !== "light" && t !== "dark") {
+            t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          }
+          document.documentElement.dataset.theme = t;
+        } catch (e) {
+          // Storage disabled (private mode, blocked cookies). Light is the
+          // tokens.css default, so this matches what would paint anyway.
+          document.documentElement.dataset.theme = "light";
+        }
+      })();
+    </script>
     <title>Catalyst UI — token-driven React component library</title>
     <meta
       name="description"

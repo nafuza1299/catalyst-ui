@@ -6,3 +6,6 @@ test-results
 playwright-report
 storybook-static
 *.tsbuildinfo
+
+# lighthouse-ci run output
+.lighthouseci
