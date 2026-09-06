@@ -22,4 +22,11 @@ jobs:
       - run: npm run test:e2e
       # build first: vite empties dist/, and build:storybook writes into dist/storybook.
       - run: npm run build
+      # Lighthouse audits dist/ while it still holds only the app. Running it
+      # after build:storybook would make lhci discover Storybook's index.html
+      # and iframe.html too, and audit those against the app's thresholds.
+      - uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: ./lighthouserc.json
+          temporaryPublicStorage: true
       - run: npm run build:storybook
