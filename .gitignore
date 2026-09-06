@@ -1,7 +1,8 @@
 .env
 node_modules
-package-lock.json
 dist
-build
-screenshots
 coverage
+test-results
+playwright-report
+storybook-static
+*.tsbuildinfo

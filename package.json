@@ -1,14 +1,30 @@
 {
-  "name": "design-system",
+  "name": "catalyst-ui",
   "private": true,
   "version": "0.1.0",
   "type": "module",
+  "description": "A token-driven React component library — 14 components, dark/light via one data attribute, designed to be read and extended by an AI.",
+  "author": "nafuza1299",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nafuza1299/catalyst-ui.git"
+  },
+  "homepage": "https://catalyst-ui.vercel.app/",
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:storybook": "storybook build -o dist/storybook",
     "preview": "vite preview",
+    "storybook": "storybook dev -p 6006",
+    "lint": "oxlint",
     "test": "jest --config jest.config.ts",
-    "test:watch": "jest --config jest.config.ts --watch"
+    "test:watch": "jest --config jest.config.ts --watch",
+    "test:coverage": "jest --config jest.config.ts --coverage",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.20",
@@ -17,6 +33,10 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@playwright/test": "^1.56.0",
+    "@storybook/addon-docs": "^9.1.10",
+    "@storybook/react-vite": "^9.1.10",
     "@tailwindcss/vite": "^4.0.0",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.2",
@@ -28,6 +48,8 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^30.4.2",
     "jest-environment-jsdom": "^30.4.1",
+    "oxlint": "^1.0.0",
+    "storybook": "^9.1.10",
     "tailwindcss": "^4.0.0",
     "ts-jest": "^29.4.12",
     "typescript": "^5.7.0",
