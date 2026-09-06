@@ -41,6 +41,15 @@ architecture on 19 lines and would train you to ignore the linter.
 **`vite build` empties `dist/`.** `build:storybook` writes into `dist/storybook`, so it
 must run second or the app build is wiped. `vercel.json` and CI both order it correctly.
 
+**Storybook is only reachable at `/storybook/`, with the trailing slash.** Its built
+`index.html` references every asset relatively (`./sb-manager/runtime.js`), so at
+`/storybook` those resolve to the domain root — where the SPA rewrite answers them with
+`index.html`. The browser then gets HTML where it expected JavaScript and renders a
+blank page with no console error and no failing request, because everything returns 200.
+`vercel.json` redirects `/storybook` to `/storybook/` to make this unreachable; link to
+the trailing-slash form anyway. Nothing in CI catches this — the e2e suite runs against
+the dev server, not the built and served output.
+
 ## Adding a component
 
 Four files in `src/components/ComponentName/`, then one table row:
