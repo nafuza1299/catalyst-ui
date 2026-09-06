@@ -84,6 +84,7 @@ const LayoutSider = forwardRef<HTMLDivElement, LayoutSiderProps>(
       onCollapse,
       breakpoint = "lg",
       className = "",
+      style,
       children,
       ...rest
     },
@@ -131,10 +132,9 @@ const LayoutSider = forwardRef<HTMLDivElement, LayoutSiderProps>(
         ]
           .filter(Boolean)
           .join(" ")}
-        style={{
-          width: displayWidth,
-          ...(rest.style as Record<string, any>),
-        }}
+        // `width` last: it is derived from the width/collapsed/breakpoint props,
+        // so a caller's `style` must not silently clobber it.
+        style={{ ...style, width: displayWidth }}
         {...rest}
       >
         {children}
