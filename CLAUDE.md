@@ -24,10 +24,23 @@ a deliberately separate categorical family — they are not action or status col
 belong only inside `Tag`.
 
 **Dark mode is `[data-theme]` on `<html>`, and nothing else.** No class toggling, no
-CSS-in-JS, no per-component theme prop. Three things honour that one contract:
-`src/theme/ThemeProvider.tsx` (app), `.storybook/preview.ts` (toolbar), and
-`e2e/a11y.spec.ts` (seeded via `localStorage['design-system-theme']`). Change the
-mechanism and all three break together — which is the point.
+CSS-in-JS, no per-component theme prop. Four things honour that one contract:
+the blocking `<script>` in `index.html` (writes it before first paint),
+`src/theme/ThemeProvider.tsx` (reads it, then owns it), `.storybook/preview.ts`
+(toolbar), and `e2e/a11y.spec.ts` (seeded via `localStorage['design-system-theme']`).
+Change the mechanism and all four break together — which is the point.
+
+**The attribute outranks `localStorage`.** `getInitialTheme` reads `[data-theme]`
+first and only falls back to storage when it is absent. The host writes the real
+theme before paint, so React's first render must agree with markup that is already
+on screen — otherwise the page flashes, and under SSR React reports a hydration
+mismatch. Storage is where the choice is *persisted*; the attribute is what is
+currently *true*. Do not reorder these.
+
+**`getInitialTheme` runs on the server under SSR.** It is a `useState` initializer,
+so it executes during render. The `typeof document === "undefined"` guard is what
+makes the library usable from Next.js at all; jsdom is not a substitute test for it,
+because jsdom has a `document`.
 
 **No barrel `index.ts`.** Consumers vendor this library by copying directories, not by
 installing it, so deep relative imports (`./components/Button/Button`) are the contract.
@@ -72,6 +85,12 @@ because the e2e suite covers the showcase.
 **jsdom has no `matchMedia`.** `ThemeProvider` calls it unguarded at init, so anything
 mounting the provider must stub it first — copy the `Object.defineProperty` block at
 the top of `src/components/ThemeToggle/ThemeToggle.test.tsx`.
+
+**Clear `[data-theme]` between tests, not just `localStorage`.** Every test in a file
+shares one jsdom document, and `ThemeProvider` now reads the attribute ahead of
+storage — so without `document.documentElement.removeAttribute('data-theme')` in
+`beforeEach`, one test's final theme silently becomes the next test's initial theme.
+The failure surfaces in the wrong test, which is what makes it expensive to find.
 
 **jsdom's `window.innerWidth` defaults to 1024**, which equals the `lg` breakpoint, so
 `Layout.Sider` mounts in its *non*-mobile branch. Reaching the mobile branch takes an
