@@ -126,7 +126,7 @@ describe('SideNav Component', () => {
   it('dismisses the mobile drawer with Escape and its backdrop', () => {
     const onOpenChange = jest.fn();
     render(<SideNav items={mockItems} open onOpenChange={onOpenChange} />);
-    const dialog = screen.getByRole('dialog', { name: 'Main navigation' });
+    expect(screen.getByRole('dialog', { name: 'Main navigation' })).toBeInTheDocument();
     expect(document.body.style.overflow).toBe('hidden');
     fireEvent.keyDown(document, { key: 'Escape' });
     fireEvent.click(screen.getByRole('button', { name: 'Close navigation' }));

@@ -9,9 +9,11 @@ import { SideNav, type SideNavItem } from "./components/SideNav/SideNav";
 import { Tag, type TagColor } from "./components/Tag/Tag";
 import { Tooltip } from "./components/Tooltip/Tooltip";
 import { Skeleton } from "./components/Skeleton/Skeleton";
+import { MultiSelect } from "./components/MultiSelect/MultiSelect";
+import { YearRangePicker } from "./components/YearRangePicker/YearRangePicker";
+import { ThemeToggle } from "./components/ThemeToggle/ThemeToggle";
 import { Col } from "./components/Grid/Col";
 import { Row } from "./components/Grid/Row";
-import { useTheme } from "./theme/ThemeProvider";
 
 const HomeIcon = () => {
   return (
@@ -42,24 +44,6 @@ const SettingsIcon = () => {
   );
 }
 
-const SunIcon = () => {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-4 w-4">
-      <circle cx="12" cy="12" r="4.5" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M12 1.5v3m0 15v3m10.5-10.5h-3m-15 0h-3" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M19.07 4.93l-2.12 2.12m-10.3 10.3l-2.12 2.12M19.07 19.07l-2.12-2.12m-10.3-10.3l-2.12-2.12" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-const MoonIcon = () => {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-4 w-4">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
 const MenuIcon = () => {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-5 w-5">
@@ -83,7 +67,6 @@ const navItems: SideNavItem[] = [
 ];
 
 const App = () => {
-  const { theme, toggleTheme } = useTheme();
   const [activeKey, setActiveKey] = useState("overview");
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [menuBarMobileOpen, setMenuBarMobileOpen] = useState(false);
@@ -92,6 +75,8 @@ const App = () => {
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [showLoadingPreview, setShowLoadingPreview] = useState(false);
+  const [regions, setRegions] = useState(["emea", "apac"]);
+  const [years, setYears] = useState<[number, number]>([2018, 2024]);
 
   const contentMap: Record<string, { title: string; eyebrow: string; description: string }> = {
     overview: {
@@ -137,14 +122,7 @@ const App = () => {
           </MenuBar.Nav>
 
           <MenuBar.Actions>
-            <Button
-              variant="ghost"
-              iconOnly
-              aria-label={theme === "light" ? "Dark mode" : "Light mode"}
-              onClick={toggleTheme}
-            >
-              {theme === "light" ? <MoonIcon /> : <SunIcon />}
-            </Button>
+            <ThemeToggle />
             <Button variant="primary" size="sm">
               Sign up
             </Button>
@@ -223,6 +201,29 @@ const App = () => {
                       <Button type="submit" size="sm">Apply filters</Button>
                     </form>
                   </Popover>
+                </Card.Body>
+              </Card>
+
+              <Card>
+                <Card.Header>
+                  <Card.Title>Filter controls</Card.Title>
+                  <Card.Description>Both buffer their edits and commit on close.</Card.Description>
+                </Card.Header>
+                <Card.Body className="flex flex-wrap items-end gap-4">
+                  <MultiSelect
+                    label="Regions"
+                    options={[
+                      { value: "emea", label: "EMEA" },
+                      { value: "apac", label: "APAC" },
+                      { value: "amer", label: "Americas" },
+                      { value: "latam", label: "LATAM" },
+                    ]}
+                    value={regions}
+                    onChange={setRegions}
+                    min={1}
+                    max={3}
+                  />
+                  <YearRangePicker label="Years" value={years} onChange={setYears} min={2000} max={2026} />
                 </Card.Body>
               </Card>
 

@@ -148,8 +148,10 @@ export const SideNav = ({
 
   return (
     <>
+      {/* Not "Main" — MenuBar already owns that landmark, and two <nav>s with
+          the same name are indistinguishable to a screen reader. */}
       <nav
-        aria-label="Main"
+        aria-label="Sidebar"
         className={[
           "hidden w-64 shrink-0 flex-col border-r border-border bg-surface lg:flex",
           className,
@@ -231,8 +233,11 @@ export const SideNav = ({
   );
 };
 
+// Rendered inside the nav's <ul>, so the outer element has to be an <li>:
+// a bare <div> as a direct list child is a WCAG failure. role="status" goes
+// on the inner wrapper so the <li> keeps its implicit listitem role.
 const SideNavSkeletonItems = () => {
-  return <div aria-busy="true" aria-label="Loading navigation" className="space-y-2 px-3 py-2">{Array.from({ length: 4 }, (_, index) => <div key={index} className="flex items-center gap-3"><Skeleton shape="circle" className="h-5 w-5" /><Skeleton className={index === 3 ? "w-2/5" : "w-3/5"} /></div>)}</div>;
+  return <li className="list-none"><div role="status" aria-busy="true" aria-label="Loading navigation" className="space-y-2 px-3 py-2">{Array.from({ length: 4 }, (_, index) => <div key={index} className="flex items-center gap-3"><Skeleton shape="circle" className="h-5 w-5" /><Skeleton className={index === 3 ? "w-2/5" : "w-3/5"} /></div>)}</div></li>;
 };
 
 SideNav.Skeleton = SideNavSkeletonItems;

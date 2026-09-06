@@ -1,18 +1,10 @@
 import {
-  createContext,
   forwardRef,
   useState,
   useEffect,
   type HTMLAttributes,
   type ReactNode,
 } from "react";
-
-// Context for shared Layout state (for future use with responsive drawer integration)
-interface LayoutContextValue {
-  hasSider?: boolean;
-}
-
-const LayoutContext = createContext<LayoutContextValue | null>(null);
 
 // Main Layout component
 export interface LayoutProps extends HTMLAttributes<HTMLDivElement> {
@@ -24,22 +16,20 @@ export interface LayoutProps extends HTMLAttributes<HTMLDivElement> {
 const LayoutRoot = forwardRef<HTMLDivElement, LayoutProps>(
   ({ hasSider = false, className = "", children, ...rest }, ref) => {
     return (
-      <LayoutContext.Provider value={{ hasSider }}>
-        <div
-          ref={ref}
-          className={[
-            "flex",
-            hasSider ? "flex-row" : "flex-col",
-            hasSider ? "flex-1" : "min-h-screen",
-            className,
-          ]
-            .filter(Boolean)
-            .join(" ")}
-          {...rest}
-        >
-          {children}
-        </div>
-      </LayoutContext.Provider>
+      <div
+        ref={ref}
+        className={[
+          "flex",
+          hasSider ? "flex-row" : "flex-col",
+          hasSider ? "flex-1" : "min-h-screen",
+          className,
+        ]
+          .filter(Boolean)
+          .join(" ")}
+        {...rest}
+      >
+        {children}
+      </div>
     );
   }
 );
@@ -94,6 +84,7 @@ const LayoutSider = forwardRef<HTMLDivElement, LayoutSiderProps>(
       onCollapse,
       breakpoint = "lg",
       className = "",
+      style,
       children,
       ...rest
     },
@@ -141,10 +132,9 @@ const LayoutSider = forwardRef<HTMLDivElement, LayoutSiderProps>(
         ]
           .filter(Boolean)
           .join(" ")}
-        style={{
-          width: displayWidth,
-          ...(rest.style as Record<string, any>),
-        }}
+        // `width` last: it is derived from the width/collapsed/breakpoint props,
+        // so a caller's `style` must not silently clobber it.
+        style={{ ...style, width: displayWidth }}
         {...rest}
       >
         {children}
@@ -166,6 +156,7 @@ const LayoutContent = forwardRef<HTMLDivElement, LayoutContentProps>(
         ref={ref}
         className={[
           "flex-1 min-w-0 overflow-y-auto",
+          "flex flex-col",
           "px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8",
           "bg-bg",
           className,
