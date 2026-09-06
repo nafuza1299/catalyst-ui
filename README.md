@@ -2,9 +2,9 @@
 
 [![CI](https://github.com/nafuza1299/catalyst-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/nafuza1299/catalyst-ui/actions/workflows/ci.yml)
 
-> Portfolio project by [nafuza1299](https://github.com/nafuza1299). Live: [catalyst-ui.vercel.app](https://catalyst-ui.vercel.app/) · Storybook: [/storybook](https://catalyst-ui.vercel.app/storybook) · Source: [github.com/nafuza1299/catalyst-ui](https://github.com/nafuza1299/catalyst-ui) · [MIT License](LICENSE).
+> Portfolio project by [nafuza1299](https://github.com/nafuza1299). Live: [catalyst-uiux.vercel.app](https://catalyst-uiux.vercel.app/) · Storybook: [/storybook](https://catalyst-uiux.vercel.app/storybook) · Source: [github.com/nafuza1299/catalyst-ui](https://github.com/nafuza1299/catalyst-ui) · [MIT License](LICENSE).
 
-[![The showcase page in light mode: a menu bar with a Products dropdown and theme toggle, a sidebar with Overview/Team/Settings, and cards demonstrating tags, four tooltip placements, a filter popover, a multi-select with chips and a year-range picker](docs/hero.png)](https://catalyst-ui.vercel.app/)
+[![The showcase page in light mode: a menu bar with a Products dropdown and theme toggle, a sidebar with Overview/Team/Settings, and cards demonstrating tags, four tooltip placements, a filter popover, a multi-select with chips and a year-range picker](docs/hero.png)](https://catalyst-uiux.vercel.app/)
 
 A 14-component React library built so that an AI can extend it without inventing
 colors. Every component ships a `.spec.md` prop contract next to its source, every

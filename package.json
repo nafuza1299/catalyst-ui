@@ -10,7 +10,7 @@
     "type": "git",
     "url": "https://github.com/nafuza1299/catalyst-ui.git"
   },
-  "homepage": "https://catalyst-ui.vercel.app/",
+  "homepage": "https://catalyst-uiux.vercel.app/",
   "engines": {
     "node": ">=24"
   },
