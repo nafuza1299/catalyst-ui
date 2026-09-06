@@ -54,9 +54,9 @@ Radius scale: `rounded-sm` (6px), `rounded-md` (8px, default for buttons/inputs)
 | Modal | ✅ built | `src/components/Modal/Modal.spec.md` — controlled portal dialog with compound slots, focus trapping, scroll lock, and focus restoration. |
 | Tooltip | ✅ built | `src/components/Tooltip/Tooltip.spec.md` — delayed hover/focus plain-text hint; uses Floating UI for automatic flip and shift positioning. |
 | Popover | ✅ built | `src/components/Popover/Popover.spec.md` — controlled, non-modal rich-content panel; uses Floating UI for positioning and dismissal. |
-| MultiSelect | ✅ built | `src/components/MultiSelect/MultiSelect.tsx` — token-styled `react-select` with `Tag` chips, min/max limits, and Select all / Clear all. Edits buffer while the menu is open and commit on close. |
-| YearRangePicker | ✅ built | `src/components/YearRangePicker/YearRangePicker.tsx` — two-click year range popover, portalled to `<body>` so an `overflow-hidden` ancestor can't clip it. |
-| ThemeToggle | ✅ built | `src/components/ThemeToggle/ThemeToggle.tsx` — icon-only light/dark switch over `useTheme`. |
+| MultiSelect | ✅ built | `src/components/MultiSelect/MultiSelect.spec.md` — token-styled `react-select` with `Tag` chips, min/max limits, and Select all / Clear all. Edits buffer while the menu is open and commit on close. |
+| YearRangePicker | ✅ built | `src/components/YearRangePicker/YearRangePicker.spec.md` — two-click year range popover, portalled to `<body>` so an `overflow-hidden` ancestor can't clip it. |
+| ThemeToggle | ✅ built | `src/components/ThemeToggle/ThemeToggle.spec.md` — icon-only light/dark switch over `useTheme`. |
 
 ## Loading states
 
@@ -72,8 +72,11 @@ Use `Skeleton` for loading content, wrapped in a region with `aria-busy="true"`.
    - `ComponentName.tsx` — implementation
    - `ComponentName.spec.md` — AI-readable usage contract, written in the same template as Button's
    - `ComponentName.test.tsx` — Jest unit test covering the component's core behavior
-   - `ComponentName.playwright.md` — Playwright CLI instructions for validating the component in the browser
-6. Do not treat the component as complete until the implementation, unit test, and Playwright instruction file are all present and aligned with the design system contract.
+   - `ComponentName.stories.tsx` — CSF3 Storybook story, one export per meaningful variant
+
+   Add a case to `e2e/showcase.spec.ts` only if the component has behavior jsdom
+   cannot see: real hover, Floating UI positioning, scroll lock, focus restoration.
+6. Do not treat the component as complete until the implementation, spec, unit test, and story are all present and aligned with the design system contract.
 
 ## Assembling a full page with Layout
 
