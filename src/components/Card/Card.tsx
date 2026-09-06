@@ -163,7 +163,7 @@ const CardFooter = forwardRef<HTMLElement, CardSectionProps>(
 CardFooter.displayName = "CardFooter";
 
 const CardSkeleton = () => {
-  return <div aria-busy="true" aria-label="Loading card" className="space-y-4 p-4 sm:p-6"><Skeleton className="w-2/5" /><Skeleton className="w-full" /><Skeleton className="w-4/5" /><Skeleton shape="rect" className="h-20 w-full" /></div>;
+  return <div role="status" aria-busy="true" aria-label="Loading card" className="space-y-4 p-4 sm:p-6"><Skeleton className="w-2/5" /><Skeleton className="w-full" /><Skeleton className="w-4/5" /><Skeleton shape="rect" className="h-20 w-full" /></div>;
 };
 
 export const Card = Object.assign(CardRoot, {

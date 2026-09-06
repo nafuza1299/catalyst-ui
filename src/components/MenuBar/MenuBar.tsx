@@ -395,7 +395,7 @@ const MenuBarActions = ({ className = "", children, ...rest }: MenuBarActionsPro
 };
 
 const MenuBarSkeleton = () => {
-  return <div aria-busy="true" aria-label="Loading navigation" className="flex w-full items-center justify-between gap-4"><Skeleton className="w-24" /><div className="hidden flex-1 gap-3 md:flex"><Skeleton className="w-16" /><Skeleton className="w-16" /><Skeleton className="w-20" /></div><Skeleton className="w-20" /></div>;
+  return <div role="status" aria-busy="true" aria-label="Loading navigation" className="flex w-full items-center justify-between gap-4"><Skeleton className="w-24" /><div className="hidden flex-1 gap-3 md:flex"><Skeleton className="w-16" /><Skeleton className="w-16" /><Skeleton className="w-20" /></div><Skeleton className="w-20" /></div>;
 };
 
 // Attach subcomponents

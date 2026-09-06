@@ -29,9 +29,13 @@
   --color-surface-hover: #f4f4f5;
   --color-border: #e4e4e7;
   --color-text: #0a0a0a;
-  --color-text-muted: #71717a;
-  --color-primary: #2563eb;
-  --color-primary-hover: #1d4ed8;
+  /* Set by their tightest pairing, not by the page background, and verified by
+     the axe run in e2e/a11y.spec.ts: muted text is read on surface-hover
+     (#f4f4f5) and text-primary is read on bg-primary/10. Both land under
+     4.5:1 one step lighter than this. */
+  --color-text-muted: #6b6b75;
+  --color-primary: #1d4ed8;
+  --color-primary-hover: #1e40af;
   --color-primary-fg: #ffffff;
   --color-danger: #dc2626;
   --color-danger-fg: #ffffff;
@@ -62,11 +66,16 @@
   --color-border: #262626;
   --color-text: #fafafa;
   --color-text-muted: #a1a1aa;
+  /* In dark mode these two carry both roles at once: a button fill, and a text
+     color sitting directly on the page background. No single blue satisfies
+     both against white text — passing on the fill needs a dark blue, passing
+     as text on #0a0a0a needs a bright one. So the fill stays bright and the
+     foreground flips to near-black, which is exactly what *-fg is for. */
   --color-primary: #3b82f6;
   --color-primary-hover: #60a5fa;
-  --color-primary-fg: #ffffff;
+  --color-primary-fg: #0a0a0a;
   --color-danger: #ef4444;
-  --color-danger-fg: #ffffff;
+  --color-danger-fg: #0a0a0a;
 
   --color-tag-blue-bg: #1e3a5f;
   --color-tag-blue-text: #93c5fd;
